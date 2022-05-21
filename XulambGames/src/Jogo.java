@@ -14,7 +14,7 @@ public class Jogo {
     }
 
     public double precoVenda() {
-        return 0d;
+        return this.categoria.precoVenda(this.precoOriginal);
     }
 
     public double getPrecoOriginal() {

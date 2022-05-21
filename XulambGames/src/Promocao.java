@@ -1,9 +1,9 @@
 public class Promocao implements ICategoriaJogo {
-    public static int[] FAIXA_PORCENTAGEM = { 70, 100 };
+    public static int[] FAIXA_PORCENTAGEM = { 30, 50 };
     private int porcentagem;
 
     public double precoVenda(double preco) {
-        return 0d;
+        return preco * porcentagem;
     }
 
     public boolean verificarFaixa() {
@@ -14,5 +14,6 @@ public class Promocao implements ICategoriaJogo {
         return this.porcentagem;
     }
 
-    public void setPorcentagem() {}
+    public void setPorcentagem() {
+    }
 }

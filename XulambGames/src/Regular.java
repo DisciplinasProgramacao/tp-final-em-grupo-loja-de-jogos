@@ -3,7 +3,7 @@ public class Regular implements ICategoriaJogo {
     private int porcentagem;
 
     public double precoVenda(double preco) {
-        return 0d;
+        return preco * porcentagem;
     }
 
     public boolean verificarFaixa() {
