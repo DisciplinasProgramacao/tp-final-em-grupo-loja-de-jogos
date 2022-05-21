@@ -17,4 +17,20 @@ public class Jogo {
         return 0d;
     }
 
+    public double getPrecoOriginal() {
+        return this.precoOriginal;
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public ICategoriaJogo getCategoria() {
+        return this.categoria;
+    }
+
+    public int getNumeroVendas() {
+        return this.numeroDeVendas;
+    }
+
 }
