@@ -2,7 +2,7 @@ public class Regular implements ICategoriaJogo {
     public static int[] FAIXA_PRECO = { 70, 100 };
     private int porcentagem;
 
-    public double precoVenda() {
+    public double precoVenda(double preco) {
         return 0d;
     }
 
@@ -14,5 +14,6 @@ public class Regular implements ICategoriaJogo {
         return this.porcentagem;
     }
 
-    public void setPorcentagem() {}
+    public void setPorcentagem() {
+    }
 }
