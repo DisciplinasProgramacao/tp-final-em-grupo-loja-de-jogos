@@ -1,3 +1,3 @@
 public interface ICategoriaJogo {
-    public double precoVenda();
+    public double precoVenda(double preco);
 }
