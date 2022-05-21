@@ -1,5 +1,5 @@
 public class Promocao implements ICategoriaJogo {
-    public static int[] FAIXA_PRECO = { 70, 100 };
+    public static int[] FAIXA_PORCENTAGEM = { 70, 100 };
     private int porcentagem;
 
     public double precoVenda(double preco) {
