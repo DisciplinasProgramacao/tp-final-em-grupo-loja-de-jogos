@@ -6,14 +6,16 @@ public class Regular implements ICategoriaJogo {
         return preco * porcentagem;
     }
 
-    public boolean verificarFaixa() {
-        return false;
+    private boolean verificarFaixa(int porcentagem) {
+        return porcentagem >= FAIXA_PORCENTAGEM[0] && porcentagem <= FAIXA_PORCENTAGEM[1];
     }
 
     public int getPorcentagem() {
         return this.porcentagem;
     }
 
-    public void setPorcentagem() {
+    public void setPorcentagem(int porcentagem) {
+        if (verificarFaixa(porcentagem))
+            this.porcentagem = porcentagem;
     }
 }
