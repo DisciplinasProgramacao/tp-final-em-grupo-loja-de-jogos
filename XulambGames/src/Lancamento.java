@@ -4,4 +4,8 @@ public class Lancamento implements ICategoriaJogo {
     public double precoVenda(double preco) {
         return preco + (preco * ADICIONAL);
     }
+
+    public String getNomeCategoria() {
+        return this.getClass().getName();
+    }
 }
