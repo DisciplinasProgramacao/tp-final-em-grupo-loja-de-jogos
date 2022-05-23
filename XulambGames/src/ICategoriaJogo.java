@@ -6,4 +6,6 @@ public interface ICategoriaJogo {
      * @return double preco final do jogo, após ser aplicado a regra da categoria
      */
     public double precoVenda(double preco);
+
+    public String getNomeCategoria();
 }
