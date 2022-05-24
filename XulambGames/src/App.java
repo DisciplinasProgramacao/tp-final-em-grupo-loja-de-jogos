@@ -6,7 +6,7 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        
+
 
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
@@ -40,7 +40,7 @@ public class App {
 
                 case "5":
                     limpaConsole();
-                    
+
                     System.out.println("Informe o nome do Jogo: ");
                     String nomeJogo = sc.nextLine();
                     System.out.println("Informe o preço: ");
@@ -54,7 +54,7 @@ public class App {
 
                     System.out.println("Informe a Categoria: ");
                     ICategoriaJogo categoriaJogo = ICategoriaJogo.
-                    
+
 
 
                 case "6":
@@ -77,13 +77,13 @@ public class App {
                         senhaCliente = sc.next();
                         System.out.println("Informe a senha novamente: ");
                         senhaNovamenteCliente = sc.next();
-                        
+
                         if(quantErros > 3){
                             System.out.println("Tente novamente");
                             pause(sc);
                             break;
                         }
-                        
+
                     }
 
 
