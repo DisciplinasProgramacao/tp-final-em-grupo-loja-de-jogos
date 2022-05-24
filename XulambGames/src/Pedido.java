@@ -18,7 +18,7 @@ public class Pedido {
             valOriginal += jogo.precoVenda();
         }
 
-        this.valPago = valorFinal();
+        this.valPago = 0;
     }
 
     public Pedido(Cliente c, Date d) {
@@ -38,7 +38,7 @@ public class Pedido {
             valOriginal += jogo.precoVenda();
         }
 
-        this.valPago = valorFinal();
+        this.valPago = 0;
     }
 
     public boolean adicionarJogos(List<Jogo> jogos) {
@@ -55,6 +55,7 @@ public class Pedido {
 
     public double valorFinal() {
 
+<<<<<<< HEAD
         return this.valOriginal - cliente.getCategoria().desconto();
 
     }
@@ -97,6 +98,39 @@ public class Pedido {
 
     public void setValPago(double valPago) {
         this.valPago = valPago;
+=======
+        return this.valOriginal - valOriginal*descontoPorCategoria() - cliente.getCategoria().desconto();
+
+        this.valPago = valorFinal();
+
+    }
+
+    public double descontoPorCategoria () {
+        int lancamentos = 0, premium = 0, promocao = 0, regular = 0;
+        for (Jogo j : jogos) {
+            switch (j.getCategoria().getNomeCategoria()) {
+                case "Lancamento":
+                    lancamentos++;
+                    break;
+                case "Premium":
+                    premium++;
+                    break;
+                case "Promocao":
+                    promocao++;
+                    break;
+                default:
+                    regular++;
+            }
+        }
+        if (lancamentos >= 2 || (premium >= 2 && jogos.size() > 2) ||
+                premium >= 3 || (regular >= 3 && (premium != 0 || lancamentos != 0) || regular >= 5)) {
+            return 0.2;
+        } else if (premium >= 2 || regular >= 4) {
+            return 0.1;
+        } else {
+            return 0;
+        }
+>>>>>>> 6e36c0f66ba14ce664734e829b36a133199eec97
     }
 
 }
