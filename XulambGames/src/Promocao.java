@@ -36,4 +36,8 @@ public class Promocao implements ICategoriaJogo {
         if (verificarFaixa(porcentagem))
             this.porcentagem = porcentagem;
     }
+
+    public String getNomeCategoria() {
+        return this.getClass().getName();
+    }
 }
