@@ -6,12 +6,11 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        
 
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
 
-        do{
+        do {
 
             String opcao = "";
 
@@ -27,12 +26,10 @@ public class App {
 
             opcao = sc.next();
 
-
-            switch(opcao){
+            switch (opcao) {
                 case "1":
 
                 case "2":
-
 
                 case "3":
 
@@ -40,22 +37,20 @@ public class App {
 
                 case "5":
                     limpaConsole();
-                    
+
                     System.out.println("Informe o nome do Jogo: ");
                     String nomeJogo = sc.nextLine();
                     System.out.println("Informe o preço: ");
 
-                    try{
+                    try {
                         Double precoJogo = Double.parseDouble(sc.nextLine());
-                    }catch(ParseException e){
+                    } catch (Exception e) {
                         System.out.println("Valor Incorreto, tente novamente");
                         break;
                     }
 
                     System.out.println("Informe a Categoria: ");
-                    ICategoriaJogo categoriaJogo = ICategoriaJogo.
-                    
-
+                    ICategoriaJogo categoriaJogo;
 
                 case "6":
                     limpaConsole();
@@ -69,7 +64,7 @@ public class App {
                     String senhaNovamenteCliente = sc.next();
 
                     int quantErros = 0;
-                    while(senhaCliente != senhaNovamenteCliente){
+                    while (senhaCliente != senhaNovamenteCliente) {
                         quantErros++;
                         limpaConsole();
                         System.out.println("Senhas diferentes, por gentileza preencher novamente");
@@ -77,40 +72,37 @@ public class App {
                         senhaCliente = sc.next();
                         System.out.println("Informe a senha novamente: ");
                         senhaNovamenteCliente = sc.next();
-                        
-                        if(quantErros > 3){
+
+                        if (quantErros > 3) {
                             System.out.println("Tente novamente");
                             pause(sc);
                             break;
                         }
-                        
+
                     }
 
-
-                    Cliente cliente = new Cliente(nomeCliente,usuarioCliente,senhaCliente);
+                    Cliente cliente = new Cliente(nomeCliente, usuarioCliente, senhaCliente);
 
                     // salvar cliente;
 
                     break;
 
-                    case "7":
-
-
+                case "7":
 
                 default:
                     System.out.println("Caractere inválido, por gentileza escolher uma opção válida");
             }
 
-        }while(continua);
+        } while (continua);
 
     }
 
-    private static void limpaConsole() {        
+    private static void limpaConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
-    private static void pause(Scanner sc){
+    private static void pause(Scanner sc) {
         sc.nextLine();
 
     }
@@ -118,53 +110,54 @@ public class App {
     TreeSet<Jogo> jogos = new TreeSet<>();
     TreeSet<Cliente> clientes = new TreeSet<>();
 
-
-/**
- * Método que busca um jogo na lista de jogos do app.
- * @param nome string
- * @return Jogo, retorna o Jogo encontrado.
- * @throws NoSuchElementException caso não encontrar o jogo na lista de jogos
- * */
+    /**
+     * Método que busca um jogo na lista de jogos do app.
+     * 
+     * @param nome string
+     * @return Jogo, retorna o Jogo encontrado.
+     * @throws NoSuchElementException caso não encontrar o jogo na lista de jogos
+     */
     public Jogo encontrarJogo(String nome) {
         Jogo achado = null;
 
-        for(Jogo j: jogos) {
-            if(j.getNome().equals(nome)) {
+        for (Jogo j : jogos) {
+            if (j.getNome().equals(nome)) {
                 achado = j;
             }
         }
 
-        if(achado == null) {
+        if (achado == null) {
             throw new NoSuchElementException("Jogo não encontrado");
         } else {
             return achado;
         }
     };
 
-/**
-  * metódo que cadastra um jogo na arvore de jogos da loja.
-  *
-  * @param j Jogo à ser adicionado na arvore de jogos
-  * @return boolean, true caso consiga adicionar, false caso não seja possivel adicionar.
-  *
-  * */
+    /**
+     * metódo que cadastra um jogo na arvore de jogos da loja.
+     *
+     * @param j Jogo à ser adicionado na arvore de jogos
+     * @return boolean, true caso consiga adicionar, false caso não seja possivel
+     *         adicionar.
+     *
+     */
 
     public boolean cadastrarJogo(Jogo j) {
         boolean result = jogos.add(j);
         return result;
     }
 
-/**
- * metodo que busca o jogo mais vendido na arvore de jogos
- *
- * @return  jogo com mais vendas
- *
- * */
+    /**
+     * metodo que busca o jogo mais vendido na arvore de jogos
+     *
+     * @return jogo com mais vendas
+     *
+     */
 
     public Jogo jogoMaisVendido() {
         Jogo maisVendido = jogos.first();
-        for(Jogo j : jogos) {
-            if(j.getNumeroVendas() > maisVendido.getNumeroVendas()) {
+        for (Jogo j : jogos) {
+            if (j.getNumeroVendas() > maisVendido.getNumeroVendas()) {
                 maisVendido = j;
             }
         }
@@ -172,20 +165,21 @@ public class App {
         return maisVendido;
     }
 
-/**
- * Metodo que retorna o jogo menos vendido na arvore de jogos,
- * @return jogo com menos numero de vendas
- * */
+    /**
+     * Metodo que retorna o jogo menos vendido na arvore de jogos,
+     * 
+     * @return jogo com menos numero de vendas
+     */
 
     public Jogo jogoMenosVendido() {
         Jogo menosVendido = jogos.first();
-        for(Jogo j : jogos) {
-            if(j.getNumeroVendas() < menosVendido.getNumeroVendas()) {
-            menosVendido = j;
+        for (Jogo j : jogos) {
+            if (j.getNumeroVendas() < menosVendido.getNumeroVendas()) {
+                menosVendido = j;
+            }
         }
-    }
 
-    return menosVendido;
+        return menosVendido;
     }
 
 }

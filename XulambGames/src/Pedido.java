@@ -14,7 +14,7 @@ public class Pedido {
         this.jogos = j;
         this.data = d;
 
-        for(Jogo jogo : j) {
+        for (Jogo jogo : j) {
             valOriginal += jogo.precoVenda();
         }
 
@@ -34,7 +34,7 @@ public class Pedido {
         this.cliente = c;
         this.valOriginal = 0;
 
-        for(Jogo jogo : j) {
+        for (Jogo jogo : j) {
             valOriginal += jogo.precoVenda();
         }
 
@@ -43,7 +43,7 @@ public class Pedido {
 
     public boolean adicionarJogos(List<Jogo> jogos) {
         boolean result = this.jogos.addAll(jogos);
-        if(result) {
+        if (result) {
             for (Jogo j : jogos) {
                 valOriginal += j.precoVenda();
             }
@@ -55,8 +55,48 @@ public class Pedido {
 
     public double valorFinal() {
 
-        return this.valOriginal - cliente.categoria.desconto();
+        return this.valOriginal - cliente.getCategoria().desconto();
 
+    }
+
+    public List<Jogo> getJogos() {
+        return jogos;
+    }
+
+    public void setJogos(List<Jogo> jogos) {
+        this.jogos = jogos;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public double getValOriginal() {
+        return valOriginal;
+    }
+
+    public void setValOriginal(double valOriginal) {
+        this.valOriginal = valOriginal;
+    }
+
+    public double getValPago() {
+        return valPago;
+    }
+
+    public void setValPago(double valPago) {
+        this.valPago = valPago;
     }
 
 }
