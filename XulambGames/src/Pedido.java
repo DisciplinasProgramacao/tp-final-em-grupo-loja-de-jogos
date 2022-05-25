@@ -55,9 +55,10 @@ public class Pedido implements Serializable {
     }
 
     public double valorFinal() {
-
-
-        return this.valOriginal - cliente.getCategoria().desconto();
+        double valorFinal = this.valOriginal;
+        valorFinal-= valorFinal * descontoPorCategoria();
+        valorFinal-= valorFinal * this.cliente.getCategoria().getDesconto();
+        return valorFinal;
 
     }
 
