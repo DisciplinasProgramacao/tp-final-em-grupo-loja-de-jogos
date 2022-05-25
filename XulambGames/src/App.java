@@ -52,7 +52,8 @@ public class App {
 
                     System.out.println("Informe a Categoria: ");
 
-                    ICategoriaJogo categoriaJogo;
+                    ICategoriaJogo categoriaJogo = ICategoriaJogo.
+
 
 
 
@@ -79,10 +80,13 @@ public class App {
 
                         if (quantErros > 3) {
 
+                        if(quantErros > 3){
+
                             System.out.println("Tente novamente");
                             pause(sc);
                             break;
                         }
+
 
                     }
 
