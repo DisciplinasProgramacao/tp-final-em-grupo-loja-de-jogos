@@ -104,7 +104,7 @@ public class Pedido implements Serializable {
     public double descontoPorCategoria () {
         int lancamentos = 0, premium = 0, promocao = 0, regular = 0;
         for (Jogo j : jogos) {
-            switch (j.getCategoria().getNomeCategoria()) {
+            switch (j.getCategoria()) {
                 case "Lancamento":
                     lancamentos++;
                     break;
