@@ -1,4 +1,4 @@
-public enum EnumJogo {
+public enum CategoriaJogo {
 
     LANCAMENTO(1.1, 1.1),
     PREMIUM(1d,1d),
@@ -8,7 +8,7 @@ public enum EnumJogo {
     private double minPreco;
     private double maxPreco; 
 
-    EnumJogo(Double minPreco, Double maxPreco){
+    CategoriaJogo(Double minPreco, Double maxPreco){
         this.minPreco = minPreco;
         this.maxPreco = maxPreco;
     }

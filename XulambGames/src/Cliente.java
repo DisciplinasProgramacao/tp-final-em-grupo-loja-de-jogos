@@ -23,7 +23,7 @@ public class Cliente {
         return true;
     }
 
-    public String historicoDeCompras(EnumJogo categoria) {
+    public String historicoDeCompras(CategoriaJogo categoria) {
         StringBuilder impressao = new StringBuilder();
         impressao.append("******HISTÓRICO DE COMPRAS******\nCATEGORIA: " + categoria + "\n");
         impressao.append("-------------------------------\n");

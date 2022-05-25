@@ -4,7 +4,7 @@ public class Jogo {
     private double precoOriginal;
     private double precoDesconto;
     private String nome;
-    private EnumJogo categoria;
+    private CategoriaJogo categoria;
     private int numeroDeVendas;
 
     /**
@@ -14,7 +14,7 @@ public class Jogo {
      * @param categoria     ICategoriaJogo categoria do jogo
      * @throws ForaDaFaixaException
      */
-    public Jogo(double precoOriginal, double precoDesconto, String nome, EnumJogo categoria) {
+    public Jogo(double precoOriginal, double precoDesconto, String nome, CategoriaJogo categoria) {
         this.precoOriginal = precoOriginal;
         this.nome = nome;
         this.categoria = categoria;
@@ -36,7 +36,7 @@ public class Jogo {
      * @param categoria ICategoriaJogo categoria que substituirá a anterior
      * @return boolean true sempré retornará verdadeiro
      */
-    public boolean mudarCategoria(EnumJogo categoria) {
+    public boolean mudarCategoria(CategoriaJogo categoria) {
         this.categoria = categoria;
         return true;
     }
