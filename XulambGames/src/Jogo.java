@@ -1,10 +1,11 @@
 import java.io.Serializable;
 import java.util.Objects;
-
+import Exception.ForaDaFaixaException;
 public class Jogo implements Serializable {
     private double precoOriginal;
+    private double precoDesconto;
     private String nome;
-    private ICategoriaJogo categoria;
+    private EnumJogo categoria;
     private int numeroDeVendas;
 
     /**
@@ -12,11 +13,16 @@ public class Jogo implements Serializable {
      * @param precoOriginal double preco padrão do jogo
      * @param nome          String nome do jogo
      * @param categoria     ICategoriaJogo categoria do jogo
+     * @throws ForaDaFaixaException
      */
-    public Jogo(double precoOriginal, String nome, ICategoriaJogo categoria) {
+    public Jogo(double precoOriginal, double precoDesconto, String nome, EnumJogo categoria) {
         this.precoOriginal = precoOriginal;
         this.nome = nome;
         this.categoria = categoria;
+
+        verificarFaixa(precoDesconto);
+        this.precoDesconto = precoDesconto;
+        
     }
 
     @Override
@@ -31,9 +37,15 @@ public class Jogo implements Serializable {
      * @param categoria ICategoriaJogo categoria que substituirá a anterior
      * @return boolean true sempré retornará verdadeiro
      */
-    public boolean mudarCategoria(ICategoriaJogo categoria) {
+    public boolean mudarCategoria(EnumJogo categoria) {
         this.categoria = categoria;
         return true;
+    }
+
+    public void verificarFaixa(double valor){
+        if(!categoria.verificarFaixa(valor)){
+            throw new ForaDaFaixaException("Valor incompatível com a categoria");
+        }
     }
 
     /**
@@ -42,7 +54,7 @@ public class Jogo implements Serializable {
      * @return double preco de venda do jogo
      */
     public double precoVenda() {
-        return this.categoria.precoVenda(this.precoOriginal);
+        return this.precoDesconto;
     }
 
     /**
@@ -68,8 +80,8 @@ public class Jogo implements Serializable {
      * 
      * @return ICategoriaJogo categoria do jogo
      */
-    public ICategoriaJogo getCategoria() {
-        return this.categoria;
+    public String getCategoria() {
+        return this.categoria.name();
     }
 
     /**
