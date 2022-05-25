@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Pedido {
+public class Pedido implements Serializable {
 
     private List<Jogo> jogos;
     private Cliente cliente;
