@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Pedido {
+public class Pedido implements Serializable {
 
     private List<Jogo> jogos;
     private Cliente cliente;
@@ -97,18 +98,13 @@ public class Pedido {
     }
 
     public void setValPago(double valPago) {
-        this.valPago = valPago;
-
-        return this.valOriginal - valOriginal*descontoPorCategoria() - cliente.getCategoria().desconto();
-
-        this.valPago = valorFinal();
-
+        this.valPago = valPago;;
     }
 
     public double descontoPorCategoria () {
         int lancamentos = 0, premium = 0, promocao = 0, regular = 0;
         for (Jogo j : jogos) {
-            switch (j.getCategoria().getNomeCategoria()) {
+            switch (j.getCategoria()) {
                 case "Lancamento":
                     lancamentos++;
                     break;
