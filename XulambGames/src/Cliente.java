@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Cliente {
     private String nome;
@@ -21,14 +23,18 @@ public class Cliente {
         return true;
     }
 
-    public String historicoDeCompras(CategoriaCliente categoria) {
+    public String historicoDeCompras(EnumJogo categoria) {
         StringBuilder impressao = new StringBuilder();
         impressao.append("******HISTÓRICO DE COMPRAS******\nCATEGORIA: " + categoria + "\n");
         impressao.append("-------------------------------\n");
-        impressao.append(this.pedidos.stream()
-                                .map()
-                                .filter(jogo -> jogo.getCategoria() == categoria)
-                                .toString());
+
+        List<Jogo> jogos = new ArrayList<>();
+        this.pedidos.forEach(pedido -> jogos.addAll(pedido.getJogos()));
+        
+        jogos.stream().filter(j -> j.getCategoria() == categoria.name()).forEach(categoriaJogo -> {
+            impressao.append(categoriaJogo.toString());
+        });
+
         impressao.append("********************************");
         return impressao.toString();
     }
