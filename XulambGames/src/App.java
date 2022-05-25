@@ -1,3 +1,4 @@
+import java.io.*;
 import java.text.ParseException;
 import java.util.Scanner;
 import com.sun.source.tree.Tree;
@@ -7,7 +8,8 @@ import java.util.*;
 public class App {
     public static void main(String[] args) throws Exception {
 
-
+          HashSet<Jogo> jogos = new HashSet<>();
+          HashSet<Cliente> clientes = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
 
@@ -119,17 +121,14 @@ public class App {
 
     }
 
-    TreeSet<Jogo> jogos = new TreeSet<>();
-    TreeSet<Cliente> clientes = new TreeSet<>();
-
     /**
      * Método que busca um jogo na lista de jogos do app.
-     * 
+     *
      * @param nome string
      * @return Jogo, retorna o Jogo encontrado.
      * @throws NoSuchElementException caso não encontrar o jogo na lista de jogos
      */
-    public Jogo encontrarJogo(String nome) {
+    public Jogo encontrarJogo(String nome, Set<Jogo> jogos) {
         Jogo achado = null;
 
         for (Jogo j : jogos) {
@@ -154,7 +153,7 @@ public class App {
      *
      */
 
-    public boolean cadastrarJogo(Jogo j) {
+    public boolean cadastrarJogo(Jogo j, Set<Jogo> jogos) {
         boolean result = jogos.add(j);
         return result;
     }
@@ -166,32 +165,89 @@ public class App {
      *
      */
 
-    public Jogo jogoMaisVendido() {
-        Jogo maisVendido = jogos.first();
-        for (Jogo j : jogos) {
-            if (j.getNumeroVendas() > maisVendido.getNumeroVendas()) {
-                maisVendido = j;
-            }
-        }
-
+    public Jogo jogoMaisVendido(Set<Jogo> jogos) {
+        Jogo maisVendido = jogos.stream().max((jogo, t1) ->  jogo.getNumeroVendas() > t1.getNumeroVendas()?1:0).orElse(null);
         return maisVendido;
     }
 
     /**
      * Metodo que retorna o jogo menos vendido na arvore de jogos,
-     * 
+     *
      * @return jogo com menos numero de vendas
      */
 
-    public Jogo jogoMenosVendido() {
-        Jogo menosVendido = jogos.first();
-        for (Jogo j : jogos) {
-            if (j.getNumeroVendas() < menosVendido.getNumeroVendas()) {
-                menosVendido = j;
-            }
-        }
+    public static Jogo jogoMenosVendido(Set<Jogo> jogos) {
+        Jogo menosVendido = jogos.stream().min((jogo, t1) -> jogo.getNumeroVendas()< t1.getNumeroVendas()?1:0).orElse(null);
 
         return menosVendido;
     }
+
+    public static boolean carregarClientesDeArquivo(String fileName, Set<Cliente> clientes) {
+        try {
+            FileInputStream file = new FileInputStream(fileName);
+            ObjectInputStream obj = new ObjectInputStream(file);
+            while(file.available() > 0) {
+                clientes.add((Cliente) obj.readObject());
+            }
+            file.close();
+
+            return true;
+        } catch (IOException e){
+            return false;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+    public static boolean carregarJogosDeArquivo(String fileName, Set<Jogo> jogos) {
+        try {
+            FileInputStream file = new FileInputStream(fileName);
+            ObjectInputStream obj = new ObjectInputStream(file);
+            while (file.available() > 0) {
+                jogos.add((Jogo)obj.readObject());
+            }
+
+            file.close();
+
+            return true;
+        } catch (IOException e) {
+            return false;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+
+    }
+
+    public static boolean salvarClientesBin (String fileName, Set<Cliente> clientes) {
+        try {
+            FileOutputStream file = new FileOutputStream(fileName);
+            ObjectOutputStream obj = new ObjectOutputStream(file);
+            for(Cliente c : clientes) {
+                obj.writeObject(c);
+            }
+
+            file.close();
+
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public static boolean salvarJogosBin (String fileName, Set<Jogo> jogos) {
+        try {
+            FileOutputStream file = new FileOutputStream(fileName);
+            ObjectOutputStream obj = new ObjectOutputStream(file);
+            for(Jogo j : jogos) {
+                obj.writeObject(j);
+            }
+
+            file.close();
+
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
 
 }

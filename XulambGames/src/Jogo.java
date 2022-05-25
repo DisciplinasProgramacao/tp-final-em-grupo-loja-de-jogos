@@ -1,4 +1,7 @@
-public class Jogo {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Jogo implements Serializable {
     private double precoOriginal;
     private String nome;
     private ICategoriaJogo categoria;
@@ -87,4 +90,16 @@ public class Jogo {
         this.numeroDeVendas = numeroDeVendas;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jogo jogo = (Jogo) o;
+        return Objects.equals(nome, jogo.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome);
+    }
 }

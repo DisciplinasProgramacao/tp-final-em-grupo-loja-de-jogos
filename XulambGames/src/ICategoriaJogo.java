@@ -1,4 +1,6 @@
-public interface ICategoriaJogo {
+import java.io.Serializable;
+
+public interface ICategoriaJogo extends Serializable {
     /**
      * Calcula o preço final do jogo baseado na regra da categoria
      * 

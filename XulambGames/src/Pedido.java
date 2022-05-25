@@ -97,12 +97,7 @@ public class Pedido {
     }
 
     public void setValPago(double valPago) {
-        this.valPago = valPago;
-
-        return this.valOriginal - valOriginal*descontoPorCategoria() - cliente.getCategoria().desconto();
-
-        this.valPago = valorFinal();
-
+        this.valPago = valPago;;
     }
 
     public double descontoPorCategoria () {

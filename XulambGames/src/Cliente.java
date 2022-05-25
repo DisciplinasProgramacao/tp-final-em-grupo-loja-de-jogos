@@ -1,7 +1,9 @@
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Objects;
 
-public class Cliente {
+public class Cliente implements Serializable {
     private String nome;
     private String usuario;
     private String senha;
@@ -126,5 +128,18 @@ public class Cliente {
 
         return impressao.toString();
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(usuario, cliente.usuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(usuario);
     }
 }
