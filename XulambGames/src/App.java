@@ -6,10 +6,7 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
-<<<<<<< HEAD
-=======
 
->>>>>>> 6e36c0f66ba14ce664734e829b36a133199eec97
 
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
@@ -54,13 +51,10 @@ public class App {
                     }
 
                     System.out.println("Informe a Categoria: ");
-<<<<<<< HEAD
+
                     ICategoriaJogo categoriaJogo;
-=======
-                    ICategoriaJogo categoriaJogo = ICategoriaJogo.
 
 
->>>>>>> 6e36c0f66ba14ce664734e829b36a133199eec97
 
                 case "6":
                     limpaConsole();
@@ -83,20 +77,15 @@ public class App {
                         System.out.println("Informe a senha novamente: ");
                         senhaNovamenteCliente = sc.next();
 
-<<<<<<< HEAD
                         if (quantErros > 3) {
-=======
-                        if(quantErros > 3){
->>>>>>> 6e36c0f66ba14ce664734e829b36a133199eec97
+
                             System.out.println("Tente novamente");
                             pause(sc);
                             break;
                         }
-<<<<<<< HEAD
-=======
 
                     }
->>>>>>> 6e36c0f66ba14ce664734e829b36a133199eec97
+
 
                     }
 
