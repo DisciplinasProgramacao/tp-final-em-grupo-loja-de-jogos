@@ -1,11 +1,28 @@
 public enum EnumJogo {
 
-    LANCAMENTO(),
-    PREMIUM,
-    REGULAR,
-    PROMOCAO;
+    LANCAMENTO(1.1, 1.1),
+    PREMIUM(1d,1d),
+    REGULAR(0.7,1d),
+    PROMOCAO(0.3,0.5);
 
-    Double minPreco;
-    Double maxPreco; 
+    private double minPreco;
+    private double maxPreco; 
+
+    EnumJogo(Double minPreco, Double maxPreco){
+        this.minPreco = minPreco;
+        this.maxPreco = maxPreco;
+    }
+
+    public boolean verificarFaixa(Double valorVenda){
+        double valorDescontoMin = valorVenda * minPreco;
+        double valorDescontoMax = valorVenda * maxPreco;
+        if(valorVenda > valorDescontoMin){
+            if(valorVenda < valorDescontoMax){
+                return true;    
+            }
+        }   
+        return false;
+    }
+
 
 }
