@@ -15,13 +15,13 @@ public class Jogo implements Serializable {
      * @param categoria     ICategoriaJogo categoria do jogo
      * @throws ForaDaFaixaException
      */
-    public Jogo(double precoOriginal, double precoDesconto, String nome, CategoriaJogo categoria) {
+    public Jogo(double precoOriginal, double precoVenda, String nome, CategoriaJogo categoria) {
         this.precoOriginal = precoOriginal;
         this.nome = nome;
         this.categoria = categoria;
 
-        verificarFaixa(precoDesconto);
-        this.precoDesconto = precoDesconto;
+        verificarFaixa(precoVenda, precoOriginal);
+        this.precoDesconto = precoVenda;
         
     }
 
@@ -42,8 +42,8 @@ public class Jogo implements Serializable {
         return true;
     }
 
-    public void verificarFaixa(double valor){
-        if(!categoria.verificarFaixa(valor)){
+    public void verificarFaixa(double valor, double valorOriginal){
+        if(!categoria.verificarFaixa(valor, valorOriginal)){
             throw new ForaDaFaixaException("Valor incompatível com a categoria");
         }
     }
@@ -80,8 +80,8 @@ public class Jogo implements Serializable {
      * 
      * @return ICategoriaJogo categoria do jogo
      */
-    public String getCategoria() {
-        return this.categoria.name();
+    public CategoriaJogo getCategoria() {
+        return this.categoria;
     }
 
     /**

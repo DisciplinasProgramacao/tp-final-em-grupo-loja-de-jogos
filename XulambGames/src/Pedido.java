@@ -57,7 +57,9 @@ public class Pedido implements Serializable {
     public double valorFinal() {
         double valorFinal = this.valOriginal;
         valorFinal-= valorFinal * descontoPorCategoria();
-        valorFinal-= valorFinal * this.cliente.getCategoria().getDesconto();
+        if(cliente.getCategoria() != null) {
+            valorFinal-= valorFinal * this.cliente.getCategoria().getDesconto();
+        }
         return valorFinal;
 
     }
@@ -106,13 +108,13 @@ public class Pedido implements Serializable {
         int lancamentos = 0, premium = 0, promocao = 0, regular = 0;
         for (Jogo j : jogos) {
             switch (j.getCategoria()) {
-                case "Lancamento":
+                case LANCAMENTO:
                     lancamentos++;
                     break;
-                case "Premium":
+                case PREMIUM:
                     premium++;
                     break;
-                case "Promocao":
+                case PROMOCAO:
                     promocao++;
                     break;
                 default:
@@ -127,6 +129,16 @@ public class Pedido implements Serializable {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder relatorio = new StringBuilder();
+        
+        relatorio.append("*********\n");
+        relatorio.append("valor Original = " + this.valOriginal + " ------ valor Pago = " + valorFinal());
+
+        return relatorio.toString();
     }
 
 }
