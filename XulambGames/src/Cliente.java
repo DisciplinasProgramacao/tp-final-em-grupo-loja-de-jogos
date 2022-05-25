@@ -13,6 +13,12 @@ public class Cliente implements Serializable {
     private CategoriaCliente categoria;
     private LinkedList<Pedido> pedidos;
 
+    /**
+     * 
+     * @param nome nome do cliente
+     * @param usuario nome usuario escolhido pelo cliente
+     * @param senha senha escolhida pelo cliente
+     */
     public Cliente(String nome, String usuario, String senha) {
         this.nome = nome;
         this.usuario = usuario;
@@ -21,11 +27,21 @@ public class Cliente implements Serializable {
         this.pedidos = new LinkedList<Pedido>();
     }
 
+    /**
+     * 
+     * @param categoria categoria de cliente desejada para mudança
+     * @return retorna verdadeiro se a operação for concluída
+     */
     public boolean mudarCategoria(CategoriaCliente categoria) {
         this.categoria = categoria;
         return true;
     }
 
+    /**
+     * 
+     * @param categoria categoria desejada para filtrar todos os jogos da lista de pedidos do cliente
+     * @return retorna uma String contendo a impressao de jogos com a categoria desejada
+     */
     public String historicoDeCompras(CategoriaJogo categoria) {
         StringBuilder impressao = new StringBuilder();
         impressao.append("******HISTÓRICO DE COMPRAS******\nCATEGORIA: " + categoria + "\n");
@@ -35,59 +51,91 @@ public class Cliente implements Serializable {
         this.pedidos.forEach(pedido -> jogos.addAll(pedido.getJogos()));
         
         jogos.stream().filter(j -> j.getCategoria() == categoria.name()).forEach(categoriaJogo -> {
-            impressao.append(categoriaJogo.toString());
+            impressao.append(categoriaJogo.toString() + "\n");
         });
 
         impressao.append("********************************");
         return impressao.toString();
     }
 
+    /**
+     * @param data data desejada para filtrar todos os jogos da lista de pedidos do cliente
+     * @return retorna uma String contendo a impressao de jogos com a data desejada
+     */
     public String historicoDeCompras(Date data) {
         StringBuilder impressao = new StringBuilder();
         impressao.append("******HISTÓRICO DE COMPRAS******\nDATA: " + data + "\n");
         impressao.append("-------------------------------\n");
-        impressao.append(this.pedidos.stream()
-                                .filter(pedido -> pedido.getData().equals(data))
-                                .getJogos()
-                                .stream()
-                                .toString());
+
+        List<Jogo> jogos = new ArrayList<>();
+        this.pedidos.stream().filter(pedido -> pedido.getData().equals(data)).forEach(pedido -> jogos.addAll(pedido.getJogos()));
+        jogos.stream().forEach(jogo -> {
+            impressao.append(jogo.toString() + "\n");
+        });
         impressao.append("********************************");
         return impressao.toString();
     }
 
+    /**
+     * @return retorno de impressao com nome e usuario do cliente
+     */
     @Override
     public String toString() {
         return ("*****USUARIO*****\nNome: " + this.nome + "\nUsuário: " + this.usuario);
     }
 
+    /**
+     * @return retorna nome
+     */
     public String getNome() {
         return nome;
     }
 
+    /**
+     * @param nome modifica o nome com base no parametro passado
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    /**
+     * @return retorna nome do usuario
+    */
     public String getUsuario() {
         return usuario;
     }
 
+    /**
+     * @param usuario modifica o nome do usuario com base no parametro passado
+     */
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
 
+    /**
+     * @return retorna senha do cliente
+     */
     public String getSenha() {
         return senha;
     }
 
+    /**
+     * @param senha modifica a senha do cliente
+     */
     public void setSenha(String senha) {
         this.senha = senha;
     }
 
+    /**
+     * @return retorna a categoria do cliente
+     */
     public CategoriaCliente getCategoria() {
         return categoria;
     }
 
+    /**
+     * @return retorna a lista de pedidos do cliente
+     */
     public LinkedList<Pedido> getPedidos() {
         return pedidos;
     }
