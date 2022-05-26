@@ -122,7 +122,7 @@ public class Pedido implements Serializable {
             }
         }
         if (lancamentos >= 2 || (premium >= 2 && jogos.size() > 2) ||
-                premium >= 3 || (regular >= 3 && (premium != 0 || lancamentos != 0) || regular >= 5)) {
+                premium >= 3 || (regular >= 3 && (premium != 0 || lancamentos != 0 || promocao != 0) || regular >= 5)) {
             return 0.2;
         } else if (premium >= 2 || regular >= 4) {
             return 0.1;

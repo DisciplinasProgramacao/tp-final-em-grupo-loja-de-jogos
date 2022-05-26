@@ -23,7 +23,7 @@ public class Cliente implements Serializable {
         this.nome = nome;
         this.usuario = usuario;
         this.senha = senha;
-        this.categoria = null;
+        this.categoria = CategoriaCliente.CADASTRADO;
         this.pedidos = new LinkedList<Pedido>();
     }
 
