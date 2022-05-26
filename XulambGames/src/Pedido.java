@@ -55,9 +55,12 @@ public class Pedido implements Serializable {
     }
 
     public double valorFinal() {
-
-
-        return this.valOriginal - cliente.getCategoria().desconto();
+        double valorFinal = this.valOriginal;
+        valorFinal-= valorFinal * descontoPorCategoria();
+        if(cliente.getCategoria() != null) {
+            valorFinal-= valorFinal * this.cliente.getCategoria().getDesconto();
+        }
+        return valorFinal;
 
     }
 
@@ -105,13 +108,13 @@ public class Pedido implements Serializable {
         int lancamentos = 0, premium = 0, promocao = 0, regular = 0;
         for (Jogo j : jogos) {
             switch (j.getCategoria()) {
-                case "Lancamento":
+                case LANCAMENTO:
                     lancamentos++;
                     break;
-                case "Premium":
+                case PREMIUM:
                     premium++;
                     break;
-                case "Promocao":
+                case PROMOCAO:
                     promocao++;
                     break;
                 default:
@@ -119,13 +122,23 @@ public class Pedido implements Serializable {
             }
         }
         if (lancamentos >= 2 || (premium >= 2 && jogos.size() > 2) ||
-                premium >= 3 || (regular >= 3 && (premium != 0 || lancamentos != 0) || regular >= 5)) {
+                premium >= 3 || (regular >= 3 && (premium != 0 || lancamentos != 0 || promocao != 0) || regular >= 5)) {
             return 0.2;
         } else if (premium >= 2 || regular >= 4) {
             return 0.1;
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder relatorio = new StringBuilder();
+        
+        relatorio.append("*********\n");
+        relatorio.append("valor Original = " + this.valOriginal + " ------ valor Pago = " + valorFinal());
+
+        return relatorio.toString();
     }
 
 }

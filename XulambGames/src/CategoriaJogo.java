@@ -8,19 +8,17 @@ public enum CategoriaJogo {
     private double minPreco;
     private double maxPreco; 
 
-    CategoriaJogo(Double minPreco, Double maxPreco){
+    CategoriaJogo(double minPreco, double maxPreco){
         this.minPreco = minPreco;
         this.maxPreco = maxPreco;
     }
 
-    public boolean verificarFaixa(Double valorVenda){
-        double valorDescontoMin = valorVenda * minPreco;
-        double valorDescontoMax = valorVenda * maxPreco;
-        if(valorVenda > valorDescontoMin){
-            if(valorVenda < valorDescontoMax){
+    public boolean verificarFaixa(double valorVenda, double valorOriginal){
+        double valorDescontoMin = valorOriginal * minPreco;
+        double valorDescontoMax = valorOriginal * maxPreco;
+            if(valorVenda <= valorDescontoMax && valorVenda >= valorDescontoMin){
                 return true;    
             }
-        }   
         return false;
     }
 
