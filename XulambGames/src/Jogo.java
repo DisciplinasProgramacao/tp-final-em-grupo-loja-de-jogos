@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.util.Objects;
-import Exception.ForaDaFaixaException;
+import Exception.*;
+
 public class Jogo implements Serializable {
     private double precoOriginal;
     private double precoDesconto;
@@ -22,7 +23,7 @@ public class Jogo implements Serializable {
 
         verificarFaixa(precoVenda, precoOriginal);
         this.precoDesconto = precoVenda;
-        
+
     }
 
     @Override
@@ -104,8 +105,10 @@ public class Jogo implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Jogo jogo = (Jogo) o;
         return Objects.equals(nome, jogo.nome);
     }
