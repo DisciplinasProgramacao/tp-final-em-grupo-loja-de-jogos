@@ -1,10 +1,10 @@
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Cliente implements Serializable {
     private String nome;
@@ -15,15 +15,15 @@ public class Cliente implements Serializable {
 
     /**
      * 
-     * @param nome nome do cliente
+     * @param nome    nome do cliente
      * @param usuario nome usuario escolhido pelo cliente
-     * @param senha senha escolhida pelo cliente
+     * @param senha   senha escolhida pelo cliente
      */
     public Cliente(String nome, String usuario, String senha) {
         this.nome = nome;
         this.usuario = usuario;
         this.senha = senha;
-        this.categoria = null;
+        this.categoria = CategoriaCliente.CADASTRADO;
         this.pedidos = new LinkedList<Pedido>();
     }
 
@@ -39,8 +39,10 @@ public class Cliente implements Serializable {
 
     /**
      * 
-     * @param categoria categoria desejada para filtrar todos os jogos da lista de pedidos do cliente
-     * @return retorna uma String contendo a impressao de jogos com a categoria desejada
+     * @param categoria categoria desejada para filtrar todos os jogos da lista de
+     *                  pedidos do cliente
+     * @return retorna uma String contendo a impressao de jogos com a categoria
+     *         desejada
      */
     public String historicoDeCompras(CategoriaJogo categoria) {
         StringBuilder impressao = new StringBuilder();
@@ -50,7 +52,7 @@ public class Cliente implements Serializable {
         List<Jogo> jogos = new ArrayList<>();
         this.pedidos.forEach(pedido -> jogos.addAll(pedido.getJogos()));
         
-        jogos.stream().filter(j -> j.getCategoria() == categoria.name()).forEach(categoriaJogo -> {
+        jogos.stream().filter(j -> j.getCategoria() == categoria).forEach(categoriaJogo -> {
             impressao.append(categoriaJogo.toString() + "\n");
         });
 
@@ -59,7 +61,8 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * @param data data desejada para filtrar todos os jogos da lista de pedidos do cliente
+     * @param data data desejada para filtrar todos os jogos da lista de pedidos do
+     *             cliente
      * @return retorna uma String contendo a impressao de jogos com a data desejada
      */
     public String historicoDeCompras(Date data) {
@@ -68,13 +71,23 @@ public class Cliente implements Serializable {
         impressao.append("-------------------------------\n");
 
         List<Jogo> jogos = new ArrayList<>();
-        this.pedidos.stream().filter(pedido -> pedido.getData().equals(data)).forEach(pedido -> jogos.addAll(pedido.getJogos()));
+        this.pedidos.stream().filter(pedido -> pedido.getData().equals(data))
+                .forEach(pedido -> jogos.addAll(pedido.getJogos()));
         jogos.stream().forEach(jogo -> {
             impressao.append(jogo.toString() + "\n");
         });
         impressao.append("********************************");
         return impressao.toString();
     }
+
+    /**
+     * 
+     * @param Pedido pedido, adiciona pedido na lista de pedidos.
+     */
+
+     public void adicionarPedido(Pedido p) {
+        pedidos.add(p);
+     }
 
     /**
      * @return retorno de impressao com nome e usuario do cliente
@@ -100,7 +113,7 @@ public class Cliente implements Serializable {
 
     /**
      * @return retorna nome do usuario
-    */
+     */
     public String getUsuario() {
         return usuario;
     }
@@ -142,8 +155,10 @@ public class Cliente implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Cliente cliente = (Cliente) o;
         return Objects.equals(usuario, cliente.usuario);
     }

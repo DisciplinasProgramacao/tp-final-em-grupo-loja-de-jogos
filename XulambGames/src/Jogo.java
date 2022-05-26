@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.util.Objects;
-import Exception.ForaDaFaixaException;
+import Exception.*;
+
 public class Jogo implements Serializable {
     private double precoOriginal;
     private double precoDesconto;
@@ -15,14 +16,14 @@ public class Jogo implements Serializable {
      * @param categoria     ICategoriaJogo categoria do jogo
      * @throws ForaDaFaixaException
      */
-    public Jogo(double precoOriginal, double precoDesconto, String nome, CategoriaJogo categoria) {
+    public Jogo(double precoOriginal, double precoVenda, String nome, CategoriaJogo categoria) {
         this.precoOriginal = precoOriginal;
         this.nome = nome;
         this.categoria = categoria;
 
-        verificarFaixa(precoDesconto);
-        this.precoDesconto = precoDesconto;
-        
+        verificarFaixa(precoVenda, precoOriginal);
+        this.precoDesconto = precoVenda;
+
     }
 
     @Override
@@ -42,8 +43,8 @@ public class Jogo implements Serializable {
         return true;
     }
 
-    public void verificarFaixa(double valor){
-        if(!categoria.verificarFaixa(valor)){
+    public void verificarFaixa(double valor, double valorOriginal){
+        if(!categoria.verificarFaixa(valor, valorOriginal)){
             throw new ForaDaFaixaException("Valor incompatível com a categoria");
         }
     }
@@ -80,8 +81,8 @@ public class Jogo implements Serializable {
      * 
      * @return ICategoriaJogo categoria do jogo
      */
-    public String getCategoria() {
-        return this.categoria.name();
+    public CategoriaJogo getCategoria() {
+        return this.categoria;
     }
 
     /**
@@ -104,8 +105,10 @@ public class Jogo implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Jogo jogo = (Jogo) o;
         return Objects.equals(nome, jogo.nome);
     }
