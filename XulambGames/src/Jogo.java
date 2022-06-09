@@ -81,8 +81,8 @@ public class Jogo implements Serializable {
      * 
      * @return ICategoriaJogo categoria do jogo
      */
-    public String getCategoria() {
-        return this.categoria.name();
+    public CategoriaJogo getCategoria() {
+        return this.categoria;
     }
 
     /**

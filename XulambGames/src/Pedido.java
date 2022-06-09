@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
@@ -102,30 +103,19 @@ public class Pedido implements Serializable {
     }
 
     public double descontoPorCategoria () {
-        int lancamentos = 0, premium = 0, promocao = 0, regular = 0;
-        for (Jogo j : jogos) {
-            switch (j.getCategoria()) {
-                case "Lancamento":
-                    lancamentos++;
-                    break;
-                case "Premium":
-                    premium++;
-                    break;
-                case "Promocao":
-                    promocao++;
-                    break;
-                default:
-                    regular++;
-            }
-        }
-        if (lancamentos >= 2 || (premium >= 2 && jogos.size() > 2) ||
-                premium >= 3 || (regular >= 3 && (premium != 0 || lancamentos != 0) || regular >= 5)) {
-            return 0.2;
-        } else if (premium >= 2 || regular >= 4) {
-            return 0.1;
-        } else {
-            return 0;
+        double pontos = jogos.stream().mapToDouble(j -> {
+            return j.getCategoria().getNivel();
+        });
+
+        if(pontos > 4.5){
+            return 0.2
+        }else if(pontos == 4) {
+            return 0.1
+        }else{
+            return 0d
         }
     }
+
+
 
 }

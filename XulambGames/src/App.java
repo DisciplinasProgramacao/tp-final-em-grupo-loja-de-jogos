@@ -8,8 +8,8 @@ import java.util.*;
 public class App {
     public static void main(String[] args) throws Exception {
 
-          HashSet<Jogo> jogos = new HashSet<>();
-          HashSet<Cliente> clientes = new HashSet<>();
+        HashSet<Jogo> jogos = new HashSet<>();
+        HashSet<Cliente> clientes = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
 
@@ -54,11 +54,6 @@ public class App {
 
                     System.out.println("Informe a Categoria: ");
 
-                    ICategoriaJogo categoriaJogo = ICategoriaJogo.
-
-
-
-
                 case "6":
                     limpaConsole();
                     System.out.println("informe o nome do Cliente: ");
@@ -82,16 +77,14 @@ public class App {
 
                         if (quantErros > 3) {
 
-                        if(quantErros > 3){
+                            if (quantErros > 3) {
 
-                            System.out.println("Tente novamente");
-                            pause(sc);
-                            break;
+                                System.out.println("Tente novamente");
+                                pause(sc);
+                                break;
+                            }
+
                         }
-
-
-                    }
-
 
                     }
 
@@ -166,7 +159,8 @@ public class App {
      */
 
     public Jogo jogoMaisVendido(Set<Jogo> jogos) {
-        Jogo maisVendido = jogos.stream().max((jogo, t1) ->  jogo.getNumeroVendas() > t1.getNumeroVendas()?1:0).orElse(null);
+        Jogo maisVendido = jogos.stream().max((jogo, t1) -> jogo.getNumeroVendas() > t1.getNumeroVendas() ? 1 : 0)
+                .orElse(null);
         return maisVendido;
     }
 
@@ -177,7 +171,8 @@ public class App {
      */
 
     public static Jogo jogoMenosVendido(Set<Jogo> jogos) {
-        Jogo menosVendido = jogos.stream().min((jogo, t1) -> jogo.getNumeroVendas()< t1.getNumeroVendas()?1:0).orElse(null);
+        Jogo menosVendido = jogos.stream().min((jogo, t1) -> jogo.getNumeroVendas() < t1.getNumeroVendas() ? 1 : 0)
+                .orElse(null);
 
         return menosVendido;
     }
@@ -186,24 +181,25 @@ public class App {
         try {
             FileInputStream file = new FileInputStream(fileName);
             ObjectInputStream obj = new ObjectInputStream(file);
-            while(file.available() > 0) {
+            while (file.available() > 0) {
                 clientes.add((Cliente) obj.readObject());
             }
             file.close();
 
             return true;
-        } catch (IOException e){
+        } catch (IOException e) {
             return false;
         } catch (ClassNotFoundException e) {
             return false;
         }
     }
+
     public static boolean carregarJogosDeArquivo(String fileName, Set<Jogo> jogos) {
         try {
             FileInputStream file = new FileInputStream(fileName);
             ObjectInputStream obj = new ObjectInputStream(file);
             while (file.available() > 0) {
-                jogos.add((Jogo)obj.readObject());
+                jogos.add((Jogo) obj.readObject());
             }
 
             file.close();
@@ -217,11 +213,11 @@ public class App {
 
     }
 
-    public static boolean salvarClientesBin (String fileName, Set<Cliente> clientes) {
+    public static boolean salvarClientesBin(String fileName, Set<Cliente> clientes) {
         try {
             FileOutputStream file = new FileOutputStream(fileName);
             ObjectOutputStream obj = new ObjectOutputStream(file);
-            for(Cliente c : clientes) {
+            for (Cliente c : clientes) {
                 obj.writeObject(c);
             }
 
@@ -233,11 +229,11 @@ public class App {
         }
     }
 
-    public static boolean salvarJogosBin (String fileName, Set<Jogo> jogos) {
+    public static boolean salvarJogosBin(String fileName, Set<Jogo> jogos) {
         try {
             FileOutputStream file = new FileOutputStream(fileName);
             ObjectOutputStream obj = new ObjectOutputStream(file);
-            for(Jogo j : jogos) {
+            for (Jogo j : jogos) {
                 obj.writeObject(j);
             }
 
@@ -248,6 +244,5 @@ public class App {
             return false;
         }
     }
-
 
 }
