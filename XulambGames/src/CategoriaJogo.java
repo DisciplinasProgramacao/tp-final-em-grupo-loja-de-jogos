@@ -1,9 +1,9 @@
 public enum CategoriaJogo {
 
-    LANCAMENTO(1.1, 1.1,3d),
-    PREMIUM(1d, 1d,2d),
+    LANCAMENTO(1.1, 1.1, 3d),
+    PREMIUM(1d, 1d, 2d),
     REGULAR(0.7, 1d, 1d),
-    PROMOCAO(0.3, 0.5,0.5);
+    PROMOCAO(0.3, 0.5, 0.5);
 
     private double minPreco;
     private double maxPreco;
@@ -26,7 +26,7 @@ public enum CategoriaJogo {
         return false;
     }
 
-    public double getNivel(){
+    public double getNivel() {
         return nivel;
     }
 

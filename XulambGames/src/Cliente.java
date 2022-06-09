@@ -23,7 +23,7 @@ public class Cliente implements Serializable {
         this.nome = nome;
         this.usuario = usuario;
         this.senha = senha;
-        this.categoria = null;
+        this.categoria = CategoriaCliente.CADASTRADO;
         this.pedidos = new LinkedList<Pedido>();
     }
 
@@ -51,8 +51,8 @@ public class Cliente implements Serializable {
 
         List<Jogo> jogos = new ArrayList<>();
         this.pedidos.forEach(pedido -> jogos.addAll(pedido.getJogos()));
-
-        jogos.stream().filter(j -> j.getCategoria() == categoria.name()).forEach(categoriaJogo -> {
+        
+        jogos.stream().filter(j -> j.getCategoria() == categoria).forEach(categoriaJogo -> {
             impressao.append(categoriaJogo.toString() + "\n");
         });
 
@@ -79,6 +79,15 @@ public class Cliente implements Serializable {
         impressao.append("********************************");
         return impressao.toString();
     }
+
+    /**
+     * 
+     * @param Pedido pedido, adiciona pedido na lista de pedidos.
+     */
+
+     public void adicionarPedido(Pedido p) {
+        pedidos.add(p);
+     }
 
     /**
      * @return retorno de impressao com nome e usuario do cliente
