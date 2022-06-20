@@ -56,9 +56,9 @@ public class Pedido implements Serializable {
 
     public double valorFinal() {
         double valorFinal = this.valOriginal;
-        valorFinal-= valorFinal * descontoPorCategoria();
-        if(cliente.getCategoria() != null) {
-            valorFinal-= valorFinal * this.cliente.getCategoria().getDesconto();
+        valorFinal -= valorFinal * descontoPorCategoria();
+        if (cliente.getCategoria() != null) {
+            valorFinal -= valorFinal * this.cliente.getCategoria().getDesconto();
         }
         return valorFinal;
 
@@ -101,20 +101,20 @@ public class Pedido implements Serializable {
     }
 
     public void setValPago(double valPago) {
-        this.valPago = valPago;;
+        this.valPago = valPago;
     }
 
-    public double descontoPorCategoria () {
+    public double descontoPorCategoria() {
         double pontos = jogos.stream().mapToDouble(j -> {
             return j.getCategoria().getNivel();
-        });
+        }).sum();
 
-        if(pontos > 4.5){
-            return 0.2
-        }else if(pontos == 4) {
-            return 0.1
-        }else{
-            return 0d
+        if (pontos > 4.5) {
+            return 0.2;
+        } else if (pontos == 4) {
+            return 0.1;
+        } else {
+            return 0d;
         }
     }
 

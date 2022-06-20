@@ -7,16 +7,12 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
-
         HashSet<Jogo> jogos = new HashSet<>();
         HashSet<Cliente> clientes = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
-
         do {
-
             String opcao = "";
-
             System.out.println("+-----------------------------------+");
             System.out.println("| 1 Comprar                         |");
             System.out.println("| 2 Histório do Cliente             |");
@@ -76,21 +72,12 @@ public class App {
                         senhaNovamenteCliente = sc.next();
 
                         if (quantErros > 3) {
-
-                            if (quantErros > 3) {
-
-                                System.out.println("Tente novamente");
-                                pause(sc);
-                                break;
-                            }
-
+                            System.out.println("Tente novamente");
+                            pause(sc);
+                            break;
                         }
-
                     }
-
-                    Cliente cliente = new Cliente(nomeCliente, usuarioCliente, senhaCliente);
-
-                    // salvar cliente;
+                    clientes.add(new Cliente(nomeCliente, usuarioCliente, senhaCliente));
 
                     break;
 

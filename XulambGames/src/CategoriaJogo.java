@@ -9,12 +9,13 @@ public enum CategoriaJogo {
     private double maxPreco;
     private double nivel;
 
-    CategoriaJogo(Double minPreco, Double maxPreco) {
+    CategoriaJogo(double minPreco, double maxPreco, double nivel) {
         this.minPreco = minPreco;
         this.maxPreco = maxPreco;
+        this.nivel = nivel;
     }
 
-    public boolean verificarFaixa(Double valorVenda) {
+    public boolean verificarFaixa(double valorVenda) {
         double valorDescontoMin = valorVenda * minPreco;
         double valorDescontoMax = valorVenda * maxPreco;
         if (valorVenda > valorDescontoMin) {
