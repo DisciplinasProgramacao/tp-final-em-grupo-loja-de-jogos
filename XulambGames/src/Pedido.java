@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
@@ -106,7 +105,6 @@ public class Pedido implements Serializable {
     }
 
     public double descontoPorCategoria () {
-<<<<<<< HEAD
         double pontos = jogos.stream().mapToDouble(j -> {
             return j.getCategoria().getNivel();
         });
@@ -119,44 +117,5 @@ public class Pedido implements Serializable {
             return 0d
         }
     }
-
-
-=======
-        int lancamentos = 0, premium = 0, promocao = 0, regular = 0;
-        for (Jogo j : jogos) {
-            switch (j.getCategoria()) {
-                case LANCAMENTO:
-                    lancamentos++;
-                    break;
-                case PREMIUM:
-                    premium++;
-                    break;
-                case PROMOCAO:
-                    promocao++;
-                    break;
-                default:
-                    regular++;
-            }
-        }
-        if (lancamentos >= 2 || (premium >= 2 && jogos.size() > 2) ||
-                premium >= 3 || (regular >= 3 && (premium != 0 || lancamentos != 0 || promocao != 0) || regular >= 5)) {
-            return 0.2;
-        } else if (premium >= 2 || regular >= 4) {
-            return 0.1;
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder relatorio = new StringBuilder();
-        
-        relatorio.append("*********\n");
-        relatorio.append("valor Original = " + this.valOriginal + " ------ valor Pago = " + valorFinal());
-
-        return relatorio.toString();
-    }
->>>>>>> 54ba52165c0ffd60ad4402ac193d58a0fe837d67
 
 }

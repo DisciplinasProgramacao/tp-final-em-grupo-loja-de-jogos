@@ -7,7 +7,6 @@ public enum CategoriaJogo {
 
     private double minPreco;
     private double maxPreco;
-
     private double nivel;
 
     CategoriaJogo(Double minPreco, Double maxPreco) {
@@ -23,6 +22,7 @@ public enum CategoriaJogo {
                 return true;
             }
         }
+
         return false;
     }
 
