@@ -118,4 +118,13 @@ public class Pedido implements Serializable {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder relatorio = new StringBuilder();
+
+        relatorio.append("*********\n");
+        relatorio.append("valor Original = " + this.valOriginal + " ------ valor Pago = " + valorFinal());
+
+        return relatorio.toString();
+    }
 }
