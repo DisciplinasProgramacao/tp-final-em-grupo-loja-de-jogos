@@ -74,6 +74,14 @@ public class Pedido implements Serializable {
     }
 
     /**
+     * responsável por adicionar um jogo à lista de jogos
+     * */
+
+    public void adicionarJogo(Jogo jogo) {
+        this.jogos.add(jogo);
+    }
+
+    /**
      * responsável por retornar o valor final do pedido baseado nas regras de negócio
      * 
      * @return valor final do pedido, com descontos

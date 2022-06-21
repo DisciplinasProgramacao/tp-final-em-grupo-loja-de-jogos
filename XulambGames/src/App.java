@@ -5,12 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 
 public class App {
@@ -38,7 +33,8 @@ public class App {
 
             switch (opcao) {
                 case "1":
-
+                    comprarJogo(sc, clientes, jogos);
+                    break;
                 case "2":
                     pegarHistorico(sc, clientes);
                     break;
@@ -212,11 +208,107 @@ public class App {
     }
 
 
-    public static void pegarHistorico(Scanner sc, Set<Cliente> clientes) {
-        System.out.println("Informe o nome do Cliente: ");
-        String nome = sc.nextLine();
+    public static void comprarJogo(Scanner sc, Set<Cliente> clientes, Set<Jogo> jogos) {
+        System.out.println("Informe o usuário do Cliente: ");
+        String usuario =  sc.nextLine();
+        List<Jogo> carrinhoDeCompra = new ArrayList<Jogo>();
+
         try {
-            Cliente cli = clientes.stream().filter(c -> c.getNome().equals(nome)).findAny().orElseThrow(() -> new NoSuchElementException("CLiente Não Encotrado"));
+
+            limpaConsole();
+
+            Cliente cli = clientes.stream().filter(c -> c.getUsuario().equals(usuario)).findAny().orElseThrow(() -> new NoSuchElementException("Cliente Não Encotrado"));
+            String opcao = "";
+
+            do {
+                System.out.println("+-----------------------------------+");
+                System.out.println("| 1 Adicionar Jogo ao carrinho      |");
+                System.out.println("| 2 Remover Jogo do carrinho        |");
+                System.out.println("| 3 Fechar compra                   |");
+                System.out.println("| 4 Sair                            |");
+                System.out.println("+-----------------------------------+");
+                System.out.print("Informe a opção desejada: ");
+                opcao = sc.nextLine();
+
+
+                switch (opcao) {
+                    case "1":
+
+                        adicionarJogo(carrinhoDeCompra, jogos, sc);
+                        break;
+                    case "2":
+
+                        removerJogo(carrinhoDeCompra, jogos, sc);
+                        break;
+                    case "3":
+                        Pedido compra = new Pedido(cli, carrinhoDeCompra, new Date());
+                        cli.adicionarPedido(compra);
+                        System.out.println("compra feita com sucesso!");
+                        System.out.println(compra);
+                        pause(sc);
+                        opcao = "4";
+                        break;
+
+                    default:
+                        System.out.println("opção invalida, tente novamente!");
+                }
+
+            } while (!opcao.equals("4"));
+
+        } catch (NoSuchElementException e) {
+
+            System.err.println("Cliente não Encontrado, Deseja tentar Novamente? (S - para sim)");
+            String again = sc.nextLine();
+
+            if(again.equalsIgnoreCase("S")) {
+                pegarHistorico(sc, clientes);
+            }
+        }
+
+    }
+
+
+    public static void adicionarJogo(List<Jogo> carrinho, Set<Jogo> jogos, Scanner sc) {
+        System.out.println("digite o nome do jogo:");
+        String nomeDoJogo = sc.nextLine();
+
+        try {
+            Jogo jogo = jogos.stream().filter(j -> j.getNome().equals(nomeDoJogo)).findAny().orElseThrow(() -> new NoSuchElementException("Jogo Não encontrado"));
+
+            carrinho.add(jogo);
+        } catch (NoSuchElementException e) {
+            System.err.println("Jogo não encontrado, deseja tentar novamente? (S - para sim)");
+
+            String again = sc.nextLine();
+            if(again.equalsIgnoreCase("s")) {
+
+                adicionarJogo(carrinho, jogos, sc);
+            }
+        }
+    }
+
+    public static void removerJogo(List<Jogo> carrinho, Set<Jogo> jogos, Scanner sc) {
+
+        System.out.println("digite o nome do jogo:");
+        String nomeDoJogo = sc.nextLine();
+
+        try {
+            Jogo jogo = jogos.stream().filter(j -> j.getNome().equals(nomeDoJogo)).findAny().orElseThrow(() -> new NoSuchElementException("Jogo Não encontrado"));
+
+            carrinho.remove(jogo);
+        } catch (NoSuchElementException e) {
+            System.err.println("Jogo não encontrado, deseja tentar novamente? (S - para sim)");
+            String again = sc.nextLine();
+            if (again.equalsIgnoreCase("s")){
+                removerJogo(carrinho, jogos, sc);
+            }
+        }
+    }
+    public static void pegarHistorico(Scanner sc, Set<Cliente> clientes) {
+        System.out.println("Informe o usuário do Cliente: ");
+        String usuario = sc.nextLine();
+        try {
+            Cliente cli = clientes.stream().filter(c -> c.getUsuario().equals(usuario)).findAny().orElseThrow(() -> new NoSuchElementException("Cliente Não Encotrado"));
 
             System.out.println("Informe a data do historico desejado: ");
 
