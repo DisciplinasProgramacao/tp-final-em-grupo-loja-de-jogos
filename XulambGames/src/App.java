@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -15,6 +16,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         HashSet<Jogo> jogos = new HashSet<>();
         HashSet<Cliente> clientes = new HashSet<>();
+        HashSet<Pedido> pedidos = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
         String arquivoClientes = "clientes.bin";
@@ -76,7 +78,36 @@ public class App {
                     }
 
                 case "4":
+                    limpaConsole();
+                    Double valorMensal = pedidos.stream().mapToDouble(Pedido::getValPago).sum();
+                    Double valorMedio = valorMensal / pedidos.size();
+                    String formatTextMais;
+                    String formatTextMenos;
 
+                    Jogo maisVendido = null;
+                    Jogo menosVendido = null;
+
+                    try{
+                        maisVendido = jogos.stream().max(Comparator.comparing(Jogo::getNumeroVendas)).get();
+                        menosVendido = jogos.stream().min(Comparator.comparing(Jogo::getNumeroVendas)).get();
+
+                        formatTextMais = "Mais Vendido:" + maisVendido.getNome()+" - nº de vendas: "+ maisVendido.getNumeroVendas()+" |";
+                        formatTextMenos = "Mais Vendido:" + menosVendido.getNome()+" - nº de vendas: "+ menosVendido.getNumeroVendas()+" |";
+                    }catch(Exception e){
+                        formatTextMenos = "Mais Vendido:" + "Sem informações";
+                        formatTextMais = "Mais Vendido:" + "Sem informações";
+                    }
+            
+
+                    System.out.println("+-----------+");
+                    System.out.println("| Valor Total Vendido: "+ valorMensal);
+                    System.out.println("| Valor Médio Vendido: "+ Math.round(valorMedio));
+                    System.out.println("| "+formatTextMais);
+                    System.out.println("| "+formatTextMenos);
+                    System.out.println("+-----------+");
+                    pause(sc);
+
+                    break;
                 case "5":
                     limpaConsole();
                     Boolean continueJogo;
