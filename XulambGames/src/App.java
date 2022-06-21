@@ -5,32 +5,38 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.Set;
 
 public class App {
     public static void main(String[] args) throws Exception {
         HashSet<Jogo> jogos = new HashSet<>();
         HashSet<Cliente> clientes = new HashSet<>();
+        HashSet<Pedido> pedidos = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
-
+        String arquivoClientes = "clientes.bin";
+        String arquivoJogos = "jogos.bin";
+        carregarClientesDeArquivo(arquivoClientes, clientes);
+        carregarJogosDeArquivo(arquivoJogos, jogos);
         do {
             limpaConsole();
             String opcao = "";
             System.out.println("+-----------------------------------+");
             System.out.println("| 1 Comprar                         |");
-            System.out.println("| 2 Histório do Cliente             |");
+            System.out.println("| 2 Histórico do Cliente            |");
             System.out.println("| 3 Consultar Compra                |");
             System.out.println("| 4 Relátorio de Vendas             |");
             System.out.println("| 5 Cadastrar Jogos                 |");
             System.out.println("| 6 Cadastrar Cliente               |");
-            System.out.println("| 7 Salvar Dados                    |");
+            System.out.println("| 7 Salvar Dados e Sair             |");
             System.out.println("+-----------------------------------+");
-
             System.out.print("Informe a opção desejada: ");
             opcao = sc.nextLine();
-
             switch (opcao) {
                 case "1":
                     comprarJogo(sc, clientes, jogos);
@@ -73,38 +79,63 @@ public class App {
                     }
 
                 case "4":
+                    limpaConsole();
+                    Double valorMensal = pedidos.stream().mapToDouble(Pedido::getValPago).sum();
+                    Double valorMedio = valorMensal / pedidos.size();
+                    String formatTextMais;
+                    String formatTextMenos;
 
+                    Jogo maisVendido = null;
+                    Jogo menosVendido = null;
+
+                    try{
+                        maisVendido = jogos.stream().max(Comparator.comparing(Jogo::getNumeroVendas)).get();
+                        menosVendido = jogos.stream().min(Comparator.comparing(Jogo::getNumeroVendas)).get();
+
+                        formatTextMais = "Mais Vendido:" + maisVendido.getNome()+" - nº de vendas: "+ maisVendido.getNumeroVendas()+" |";
+                        formatTextMenos = "Mais Vendido:" + menosVendido.getNome()+" - nº de vendas: "+ menosVendido.getNumeroVendas()+" |";
+                    }catch(Exception e){
+                        formatTextMenos = "Mais Vendido:" + "Sem informações";
+                        formatTextMais = "Mais Vendido:" + "Sem informações";
+                    }
+            
+
+                    System.out.println("+-----------+");
+                    System.out.println("| Valor Total Vendido: "+ valorMensal);
+                    System.out.println("| Valor Médio Vendido: "+ Math.round(valorMedio));
+                    System.out.println("| "+formatTextMais);
+                    System.out.println("| "+formatTextMenos);
+                    System.out.println("+-----------+");
+                    pause(sc);
+
+                    break;
                 case "5":
                     limpaConsole();
                     Boolean continueJogo;
                     Boolean continuaPreco = false;
                     Boolean continuaNome = true;
-
                     String valorJogo;
                     String valorJogoVenda;
                     String nomeJogo = "";
                     CategoriaJogo ctJogo;
 
-                    
-                    do{
+                    do {
                         limpaConsole();
                         System.out.println("Informe o nome do Jogo: ");
                         String nome = sc.nextLine().toLowerCase();
                         Long sizeSearch = jogos.stream().filter(j -> j.getNome().equals(nome.toLowerCase())).count();
 
-                        if(sizeSearch == 0){
+                        if (sizeSearch == 0) {
                             continuaNome = false;
                             nomeJogo = nome;
-                        }else {
+                        } else {
                             System.out.println("--- Jogo repetido ---");
                             pause(sc);
                         }
 
-                    }while(continuaNome);
+                    } while (continuaNome);
 
-                    
-                    
-                    do{
+                    do {
                         limpaConsole();
                         System.out.println("+----------------+");
                         System.out.println("| 1 LANÇAMENTO   |");
@@ -113,47 +144,44 @@ public class App {
                         System.out.println("| 4 PROMOÇÃO     |");
                         System.out.println("+----------------+");
                         System.out.print("Informe a Categoria: ");
-                    
-                        try{
+
+                        try {
                             String numCategoria = sc.nextLine();
                             ctJogo = CategoriaJogo.values()[Integer.parseInt(numCategoria) - 1];
                             continueJogo = false;
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             System.out.println("--- Categoria inválida ---");
                             pause(sc);
 
                             ctJogo = null;
                             continueJogo = true;
                         }
-                        
-                    }while(continueJogo);
 
+                    } while (continueJogo);
 
-                    do{
+                    do {
                         limpaConsole();
                         System.out.println("Informe o preço: ");
                         valorJogo = sc.nextLine();
                         System.out.println("inform o preço de venda: ");
                         valorJogoVenda = sc.nextLine();
-                        
+
                         try {
-                            Jogo jogo = new Jogo(Double.parseDouble(valorJogo), Double.parseDouble(valorJogoVenda), nomeJogo, ctJogo);
+                            Jogo jogo = new Jogo(Double.parseDouble(valorJogo), Double.parseDouble(valorJogoVenda),
+                                    nomeJogo, ctJogo);
                             jogos.add(jogo);
                         } catch (Exception e) {
                             System.out.println("--- Valor incompátivel com a categoria ---");
                             pause(sc);
 
-
                             continuaPreco = true;
                         }
-                        
-                        
-                    }while(continuaPreco);
-                    
+
+                    } while (continuaPreco);
+
                     limpaConsole();
                     System.out.println("--- jogo cadastrado ---");
                     pause(sc);
-
 
                     break;
                 case "6":
@@ -184,17 +212,23 @@ public class App {
                         }
                     }
                     clientes.add(new Cliente(nomeCliente, usuarioCliente, senhaCliente));
-
                     break;
-
                 case "7":
+                    limpaConsole();
+                    if (salvarClientesBin(arquivoClientes, clientes) &&
+                            salvarJogosBin(arquivoJogos, jogos))
+                        System.out.println("Os dados foram salvos com successo!");
+                    else
+                        System.out.println("Algum problema ocorreu na hora de salvar os dados...");
 
+                    System.out.println("Obrigado por usar XulambsGames!");
+                    continua = false;
+                    break;
                 default:
                     System.out.println("Caractere inválido, por gentileza escolher uma opção válida");
             }
 
         } while (continua);
-
 
     }
 
@@ -206,7 +240,6 @@ public class App {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
-
 
     public static void comprarJogo(Scanner sc, Set<Cliente> clientes, Set<Jogo> jogos) {
         System.out.println("Informe o usuário do Cliente: ");
@@ -304,11 +337,21 @@ public class App {
             }
         }
     }
+
+    /**
+     * Método para encapsular pegar o histórico de pedidos de um cliente
+     * 
+     * @param sc       Scanner de entrada do usuário
+     * @param clientes Set de clientes em que o cliente será procurado
+     */
+
     public static void pegarHistorico(Scanner sc, Set<Cliente> clientes) {
         System.out.println("Informe o usuário do Cliente: ");
         String usuario = sc.nextLine();
         try {
-            Cliente cli = clientes.stream().filter(c -> c.getUsuario().equals(usuario)).findAny().orElseThrow(() -> new NoSuchElementException("Cliente Não Encotrado"));
+
+            Cliente cli = clientes.stream().filter(c -> c.getNome().equals(nome)).findAny()
+                    .orElseThrow(() -> new NoSuchElementException("CLiente Não Encotrado"));
 
             System.out.println("Informe a data do historico desejado: ");
 
@@ -339,13 +382,13 @@ public class App {
             System.err.println("Cliente não Encontrado, Deseja tentar Novamente? (S - para sim)");
             String again = sc.nextLine();
 
-            if(again.equalsIgnoreCase("S")) {
+            if (again.equalsIgnoreCase("S")) {
                 pegarHistorico(sc, clientes);
             }
 
         }
     }
-  
+
     /**
      * Método responsável por pausar o scanner (entrada do usuário), fazendo com que
      * seja necessário apertar enter para prosseguir.
