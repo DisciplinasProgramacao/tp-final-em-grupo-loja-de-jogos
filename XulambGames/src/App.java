@@ -13,10 +13,6 @@ public class App {
         HashSet<Cliente> clientes = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
-        Cliente aa = new Cliente("Luan", "luan", "1234");
-        clientes.add(aa);
-        jogos.add(new Jogo(120, 120, "Bom de Guerra", CategoriaJogo.REGULAR));
-        aa.adicionarPedido(new Pedido(aa, jogos.stream().toList(), new Date()));
 
         do {
             String opcao = "";
