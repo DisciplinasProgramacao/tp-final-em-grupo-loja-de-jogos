@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
+
 public class App {
     public static void main(String[] args) throws Exception {
         HashSet<Jogo> jogos = new HashSet<>();
@@ -17,6 +18,7 @@ public class App {
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
         do {
+            limpaConsole();
             String opcao = "";
             System.out.println("+-----------------------------------+");
             System.out.println("| 1 Comprar                         |");
@@ -28,7 +30,8 @@ public class App {
             System.out.println("| 7 Salvar Dados                    |");
             System.out.println("+-----------------------------------+");
 
-            opcao = sc.next();
+            System.out.print("Informe a opção desejada: ");
+            opcao = sc.nextLine();
 
             switch (opcao) {
                 case "1":
@@ -73,20 +76,86 @@ public class App {
 
                 case "5":
                     limpaConsole();
+                    Boolean continueJogo;
+                    Boolean continuaPreco = false;
+                    Boolean continuaNome = true;
 
-                    System.out.println("Informe o nome do Jogo: ");
-                    String nomeJogo = sc.nextLine();
-                    System.out.println("Informe o preço: ");
+                    String valorJogo;
+                    String valorJogoVenda;
+                    String nomeJogo = "";
+                    CategoriaJogo ctJogo;
 
-                    try {
-                        Double precoJogo = Double.parseDouble(sc.nextLine());
-                    } catch (Exception e) {
-                        System.out.println("Valor Incorreto, tente novamente");
-                        break;
-                    }
+                    
+                    do{
+                        limpaConsole();
+                        System.out.println("Informe o nome do Jogo: ");
+                        String nome = sc.nextLine().toLowerCase();
+                        Long sizeSearch = jogos.stream().filter(j -> j.getNome().equals(nome.toLowerCase())).count();
 
-                    System.out.println("Informe a Categoria: ");
+                        if(sizeSearch == 0){
+                            continuaNome = false;
+                            nomeJogo = nome;
+                        }else {
+                            System.out.println("--- Jogo repetido ---");
+                            pause(sc);
+                        }
 
+                    }while(continuaNome);
+
+                    
+                    
+                    do{
+                        limpaConsole();
+                        System.out.println("+----------------+");
+                        System.out.println("| 1 LANÇAMENTO   |");
+                        System.out.println("| 2 PREMIUM      |");
+                        System.out.println("| 3 REGULAR      |");
+                        System.out.println("| 4 PROMOÇÃO     |");
+                        System.out.println("+----------------+");
+                        System.out.print("Informe a Categoria: ");
+                    
+                        try{
+                            String numCategoria = sc.nextLine();
+                            ctJogo = CategoriaJogo.values()[Integer.parseInt(numCategoria) - 1];
+                            continueJogo = false;
+                        }catch(Exception e){
+                            System.out.println("--- Categoria inválida ---");
+                            pause(sc);
+
+                            ctJogo = null;
+                            continueJogo = true;
+                        }
+                        
+                    }while(continueJogo);
+
+
+                    do{
+                        limpaConsole();
+                        System.out.println("Informe o preço: ");
+                        valorJogo = sc.nextLine();
+                        System.out.println("inform o preço de venda: ");
+                        valorJogoVenda = sc.nextLine();
+                        
+                        try {
+                            Jogo jogo = new Jogo(Double.parseDouble(valorJogo), Double.parseDouble(valorJogoVenda), nomeJogo, ctJogo);
+                            jogos.add(jogo);
+                        } catch (Exception e) {
+                            System.out.println("--- Valor incompátivel com a categoria ---");
+                            pause(sc);
+
+
+                            continuaPreco = true;
+                        }
+                        
+                        
+                    }while(continuaPreco);
+                    
+                    limpaConsole();
+                    System.out.println("--- jogo cadastrado ---");
+                    pause(sc);
+
+
+                    break;
                 case "6":
                     limpaConsole();
                     System.out.println("informe o nome do Cliente: ");
