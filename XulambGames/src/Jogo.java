@@ -21,7 +21,7 @@ public class Jogo implements Serializable {
         this.nome = nome;
         this.categoria = categoria;
 
-        verificarFaixa(precoOriginal);
+        verificarFaixa(precoOriginal, precoVenda);
         this.precoDesconto = precoVenda;
 
     }
@@ -43,8 +43,8 @@ public class Jogo implements Serializable {
         return true;
     }
 
-    public void verificarFaixa(double valor) {
-        if (!categoria.verificarFaixa(valor)) {
+    public void verificarFaixa(double valor, double valorVenda) {
+        if (!categoria.verificarFaixa(valor, valorVenda)) {
             throw new ForaDaFaixaException("Valor incompatível com a categoria");
         }
     }
