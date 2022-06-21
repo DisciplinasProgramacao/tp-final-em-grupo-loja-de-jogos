@@ -18,8 +18,8 @@ public enum CategoriaJogo {
     public boolean verificarFaixa(double valorVenda) {
         double valorDescontoMin = valorVenda * minPreco;
         double valorDescontoMax = valorVenda * maxPreco;
-        if (valorVenda > valorDescontoMin) {
-            if (valorVenda < valorDescontoMax) {
+        if (valorVenda >= valorDescontoMin) {
+            if (valorVenda <= valorDescontoMax) {
                 return true;
             }
         }

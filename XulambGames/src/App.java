@@ -1,5 +1,7 @@
 import java.io.*;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import com.sun.source.tree.Tree;
 
@@ -11,6 +13,11 @@ public class App {
         HashSet<Cliente> clientes = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
+        Cliente aa = new Cliente("Luan", "luan", "1234");
+        clientes.add(aa);
+        jogos.add(new Jogo(120, 120, "Bom de Guerra", CategoriaJogo.REGULAR));
+        aa.adicionarPedido(new Pedido(aa, jogos.stream().toList(), new Date()));
+
         do {
             String opcao = "";
             System.out.println("+-----------------------------------+");
@@ -23,13 +30,14 @@ public class App {
             System.out.println("| 7 Salvar Dados                    |");
             System.out.println("+-----------------------------------+");
 
-            opcao = sc.next();
+            opcao = sc.nextLine();
 
             switch (opcao) {
                 case "1":
 
                 case "2":
-
+                    pegarHistorico(sc, clientes);
+                    break;
                 case "3":
 
                 case "4":
@@ -57,19 +65,19 @@ public class App {
                     System.out.println("Informe o usuário: ");
                     String usuarioCliente = sc.nextLine();
                     System.out.println("Informe a senha do usuário: ");
-                    String senhaCliente = sc.next();
+                    String senhaCliente = sc.nextLine();
                     System.out.println("Informe a senha novamente: ");
-                    String senhaNovamenteCliente = sc.next();
+                    String senhaNovamenteCliente = sc.nextLine();
 
                     int quantErros = 0;
-                    while (senhaCliente != senhaNovamenteCliente) {
+                    while (!senhaCliente.equals(senhaNovamenteCliente)) {
                         quantErros++;
                         limpaConsole();
                         System.out.println("Senhas diferentes, por gentileza preencher novamente");
                         System.out.println("Informe a senha do usuário: ");
-                        senhaCliente = sc.next();
+                        senhaCliente = sc.nextLine();
                         System.out.println("Informe a senha novamente: ");
-                        senhaNovamenteCliente = sc.next();
+                        senhaNovamenteCliente = sc.nextLine();
 
                         if (quantErros > 3) {
                             System.out.println("Tente novamente");
@@ -89,11 +97,54 @@ public class App {
 
         } while (continua);
 
+
     }
 
     private static void limpaConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public static void pegarHistorico(Scanner sc, Set<Cliente> clientes) {
+        System.out.println("Informe o nome do Cliente: ");
+        String nome = sc.nextLine();
+        try {
+            Cliente cli = clientes.stream().filter(c -> c.getNome().equals(nome)).findAny().orElseThrow(() -> new NoSuchElementException("CLiente Não Encotrado"));
+
+            System.out.println("Informe a data do historico desejado: ");
+
+            Date desejado = null;
+            Boolean error;
+
+            do {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    String dataDesejada = sc.nextLine();
+                    desejado = dateFormat.parse(dataDesejada);
+                    error = false;
+                } catch (ParseException e) {
+                    System.err.println("Por favor digite a data no formato dd/MM/yyyy");
+                    System.err.println("Data Invalida, tente novamente!");
+                    error = true;
+                }
+            } while (error == true);
+
+            System.out.println(cli.historicoDeCompras(desejado));
+
+            System.out.println("Aperte qualquer tecla para limpar o terminal");
+            pause(sc);
+            limpaConsole();
+
+        } catch (NoSuchElementException error) {
+
+            System.err.println("Cliente não Encontrado, Deseja tentar Novamente? (S - para sim)");
+            String again = sc.nextLine();
+
+            if(again.equalsIgnoreCase("S")) {
+                pegarHistorico(sc, clientes);
+            }
+
+        }
     }
 
     private static void pause(Scanner sc) {
