@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
+
 import java.util.*;
 
 public class App {
@@ -35,16 +36,33 @@ public class App {
 
                 case "5":
                     limpaConsole();
-                    System.out.println("Informe o nome do Jogo: ");
-                    String nomeJogo = sc.nextLine();
-
-                    
                     Boolean continueJogo;
                     Boolean continuaPreco = false;
+                    Boolean continuaNome = true;
 
                     String valorJogo;
                     String valorJogoVenda;
+                    String nomeJogo = "";
                     CategoriaJogo ctJogo;
+
+                    
+                    do{
+                        limpaConsole();
+                        System.out.println("Informe o nome do Jogo: ");
+                        String nome = sc.nextLine().toLowerCase();
+                        Long sizeSearch = jogos.stream().filter(j -> j.getNome().equals(nome.toLowerCase())).count();
+
+                        if(sizeSearch == 0){
+                            continuaNome = false;
+                            nomeJogo = nome;
+                        }else {
+                            System.out.println("--- Jogo repetido ---");
+                            pause(sc);
+                        }
+
+                    }while(continuaNome);
+
+                    
                     
                     do{
                         limpaConsole();

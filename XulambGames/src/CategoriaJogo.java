@@ -16,15 +16,10 @@ public enum CategoriaJogo {
     }
 
     public boolean verificarFaixa(double valorJogo,double valorVenda) {
-        double valorDescontoMin = valorJogo * minPreco;
-        double valorDescontoMax = valorJogo * maxPreco;
-        if (valorVenda == valorDescontoMin) {
-            if (valorVenda == valorDescontoMax) {
-                return true;
-            }
-        }
-
-        return false;
+        Double valorDescontoMin = valorJogo * minPreco;
+        Double valorDescontoMax = valorJogo * maxPreco;
+        return valorVenda >= Math.round(valorDescontoMin) && valorVenda <= Math.round(valorDescontoMax);
+        
     }
 
     public double getNivel() {
