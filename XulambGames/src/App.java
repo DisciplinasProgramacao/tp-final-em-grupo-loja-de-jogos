@@ -53,12 +53,16 @@ public class App {
                         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                         Date dataPedido = formato.parse(dataPedidoString);
                         procura.getPedidos().stream()
-                                            .filter(x -> x.getData().equals(dataPedido))
+                                            .filter(pedido -> formato.format(pedido.getData()).equals(formato.format(dataPedido)))
                                             .forEach(pedido -> System.out.println(pedido.toString()));
                     pause(sc);
                     break;
                     }
                     catch(IllegalArgumentException e){
+                        System.out.println("Data incorreta, tente novamente");
+                        break;
+                    }
+                    catch(NullPointerException e){
                         System.out.println("Data incorreta, tente novamente");
                         break;
                     }
