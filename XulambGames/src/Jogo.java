@@ -14,7 +14,7 @@ public class Jogo implements Serializable {
      * @param precoOriginal double preco padrão do jogo
      * @param nome          String nome do jogo
      * @param categoria     ICategoriaJogo categoria do jogo
-     * @throws ForaDaFaixaException
+     * @throws ForaDaFaixaException preço fora da faixa estabelecida
      */
     public Jogo(double precoOriginal, double precoVenda, String nome, CategoriaJogo categoria) {
         this.precoOriginal = precoOriginal;
@@ -43,6 +43,11 @@ public class Jogo implements Serializable {
         return true;
     }
 
+    /**
+     * responsável por verificar a faixa de preço pré-estabelecida na categoria de jogos
+     * @param valor valor a ser verificado
+     * @throws ForaDaFaixaException preço fora da faixa estabelecida
+     */
     public void verificarFaixa(double valor, double valorVenda) {
         if (!categoria.verificarFaixa(valor, valorVenda)) {
             throw new ForaDaFaixaException("Valor incompatível com a categoria");
