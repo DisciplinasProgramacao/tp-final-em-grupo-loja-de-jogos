@@ -3,11 +3,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
-
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -39,12 +40,12 @@ public class App {
                     System.out.println("Informe o usuario: ");
                     String nomeUsuario = sc.nextLine();
                     Cliente procura = clientes.stream()
-                                              .filter(x -> x.getUsuario()
-                                              .equals(nomeUsuario))
-                                              .findAny()
-                                              .orElse(null);
+                            .filter(x -> x.getUsuario()
+                                    .equals(nomeUsuario))
+                            .findAny()
+                            .orElse(null);
                     limpaConsole();
-                    if(procura == null){
+                    if (procura == null) {
                         System.out.println("Usuário não encontrado");
                         pause(sc);
                         break;
@@ -52,20 +53,18 @@ public class App {
                     System.out.println("Informe a data do pedido: ");
                     String dataPedidoString = sc.nextLine();
                     limpaConsole();
-                    try{
+                    try {
                         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                         Date dataPedido = formato.parse(dataPedidoString);
                         procura.getPedidos().stream()
-                                            .filter(pedido -> formato.format(pedido.getData()).equals(formato.format(dataPedido)))
-                                            .forEach(pedido -> System.out.println(pedido.toString()));
-                    pause(sc);
-                    break;
-                    }
-                    catch(IllegalArgumentException e){
+                                .filter(pedido -> formato.format(pedido.getData()).equals(formato.format(dataPedido)))
+                                .forEach(pedido -> System.out.println(pedido.toString()));
+                        pause(sc);
+                        break;
+                    } catch (IllegalArgumentException e) {
                         System.out.println("Data incorreta, tente novamente");
                         break;
-                    }
-                    catch(NullPointerException e){
+                    } catch (NullPointerException e) {
                         System.out.println("Data incorreta, tente novamente");
                         break;
                     }
@@ -196,7 +195,7 @@ public class App {
      *
      * @return Jogo com menor número de vendas, null caso não encontre
      */
-    public static Jogo jogoMenosVendido(Set<Jogo> jogos) {
+    public Jogo jogoMenosVendido(Set<Jogo> jogos) {
         return jogos.stream().min((jogo, t1) -> jogo.getNumeroVendas() < t1.getNumeroVendas() ? 1 : 0)
                 .orElse(null);
     }
@@ -294,5 +293,4 @@ public class App {
             return false;
         }
     }
-
 }
