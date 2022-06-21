@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
+
 public class App {
     public static void main(String[] args) throws Exception {
         HashSet<Jogo> jogos = new HashSet<>();
@@ -34,6 +35,40 @@ public class App {
                 case "2":
 
                 case "3":
+                    limpaConsole();
+                    System.out.println("Informe o usuario: ");
+                    String nomeUsuario = sc.nextLine();
+                    Cliente procura = clientes.stream()
+                                              .filter(x -> x.getUsuario()
+                                              .equals(nomeUsuario))
+                                              .findAny()
+                                              .orElse(null);
+                    limpaConsole();
+                    if(procura == null){
+                        System.out.println("Usuário não encontrado");
+                        pause(sc);
+                        break;
+                    }
+                    System.out.println("Informe a data do pedido: ");
+                    String dataPedidoString = sc.nextLine();
+                    limpaConsole();
+                    try{
+                        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                        Date dataPedido = formato.parse(dataPedidoString);
+                        procura.getPedidos().stream()
+                                            .filter(pedido -> formato.format(pedido.getData()).equals(formato.format(dataPedido)))
+                                            .forEach(pedido -> System.out.println(pedido.toString()));
+                    pause(sc);
+                    break;
+                    }
+                    catch(IllegalArgumentException e){
+                        System.out.println("Data incorreta, tente novamente");
+                        break;
+                    }
+                    catch(NullPointerException e){
+                        System.out.println("Data incorreta, tente novamente");
+                        break;
+                    }
 
                 case "4":
 
