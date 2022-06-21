@@ -209,6 +209,12 @@ public class App {
         System.out.flush();
     }
 
+    /**
+     * Método para encapsular pegar o histórico de pedidos de um cliente
+     * 
+     * @param sc       Scanner de entrada do usuário
+     * @param clientes Set de clientes em que o cliente será procurado
+     */
     public static void pegarHistorico(Scanner sc, Set<Cliente> clientes) {
         System.out.println("Informe o nome do Cliente: ");
         String nome = sc.nextLine();
