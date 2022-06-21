@@ -1,5 +1,6 @@
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -66,12 +67,14 @@ public class Cliente implements Serializable {
      * @return retorna uma String contendo a impressao de jogos com a data desejada
      */
     public String historicoDeCompras(Date data) {
+
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         StringBuilder impressao = new StringBuilder();
         impressao.append("******HISTÓRICO DE COMPRAS******\nDATA: " + data + "\n");
         impressao.append("-------------------------------\n");
 
         List<Jogo> jogos = new ArrayList<>();
-        this.pedidos.stream().filter(pedido -> pedido.getData().equals(data))
+        this.pedidos.stream().filter(pedido -> format.format(pedido.getData()).equals(format.format(data)))
                 .forEach(pedido -> jogos.addAll(pedido.getJogos()));
         jogos.stream().forEach(jogo -> {
             impressao.append(jogo.toString() + "\n");

@@ -21,7 +21,7 @@ public class Jogo implements Serializable {
         this.nome = nome;
         this.categoria = categoria;
 
-        verificarFaixa(precoOriginal);
+        verificarFaixa(precoOriginal, precoVenda);
         this.precoDesconto = precoVenda;
 
     }
@@ -48,8 +48,8 @@ public class Jogo implements Serializable {
      * @param valor valor a ser verificado
      * @throws ForaDaFaixaException preço fora da faixa estabelecida
      */
-    public void verificarFaixa(double valor) {
-        if (!categoria.verificarFaixa(valor)) {
+    public void verificarFaixa(double valor, double valorVenda) {
+        if (!categoria.verificarFaixa(valor, valorVenda)) {
             throw new ForaDaFaixaException("Valor incompatível com a categoria");
         }
     }

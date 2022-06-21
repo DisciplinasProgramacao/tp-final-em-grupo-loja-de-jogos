@@ -3,8 +3,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
+
 import java.util.Scanner;
 import java.util.Set;
 
@@ -15,7 +19,9 @@ public class App {
         HashSet<Cliente> clientes = new HashSet<>();
         boolean continua = true;
         Scanner sc = new Scanner(System.in);
+
         do {
+            limpaConsole();
             String opcao = "";
             System.out.println("+-----------------------------------+");
             System.out.println("| 1 Comprar                         |");
@@ -27,24 +33,26 @@ public class App {
             System.out.println("| 7 Salvar Dados                    |");
             System.out.println("+-----------------------------------+");
 
-            opcao = sc.next();
+            System.out.print("Informe a opção desejada: ");
+            opcao = sc.nextLine();
 
             switch (opcao) {
                 case "1":
 
                 case "2":
-
+                    pegarHistorico(sc, clientes);
+                    break;
                 case "3":
                     limpaConsole();
                     System.out.println("Informe o usuario: ");
                     String nomeUsuario = sc.nextLine();
                     Cliente procura = clientes.stream()
-                                              .filter(x -> x.getUsuario()
-                                              .equals(nomeUsuario))
-                                              .findAny()
-                                              .orElse(null);
+                            .filter(x -> x.getUsuario()
+                                    .equals(nomeUsuario))
+                            .findAny()
+                            .orElse(null);
                     limpaConsole();
-                    if(procura == null){
+                    if (procura == null) {
                         System.out.println("Usuário não encontrado");
                         pause(sc);
                         break;
@@ -52,20 +60,18 @@ public class App {
                     System.out.println("Informe a data do pedido: ");
                     String dataPedidoString = sc.nextLine();
                     limpaConsole();
-                    try{
+                    try {
                         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                         Date dataPedido = formato.parse(dataPedidoString);
                         procura.getPedidos().stream()
-                                            .filter(pedido -> formato.format(pedido.getData()).equals(formato.format(dataPedido)))
-                                            .forEach(pedido -> System.out.println(pedido.toString()));
-                    pause(sc);
-                    break;
-                    }
-                    catch(IllegalArgumentException e){
+                                .filter(pedido -> formato.format(pedido.getData()).equals(formato.format(dataPedido)))
+                                .forEach(pedido -> System.out.println(pedido.toString()));
+                        pause(sc);
+                        break;
+                    } catch (IllegalArgumentException e) {
                         System.out.println("Data incorreta, tente novamente");
                         break;
-                    }
-                    catch(NullPointerException e){
+                    } catch (NullPointerException e) {
                         System.out.println("Data incorreta, tente novamente");
                         break;
                     }
@@ -74,20 +80,86 @@ public class App {
 
                 case "5":
                     limpaConsole();
+                    Boolean continueJogo;
+                    Boolean continuaPreco = false;
+                    Boolean continuaNome = true;
 
-                    System.out.println("Informe o nome do Jogo: ");
-                    String nomeJogo = sc.nextLine();
-                    System.out.println("Informe o preço: ");
+                    String valorJogo;
+                    String valorJogoVenda;
+                    String nomeJogo = "";
+                    CategoriaJogo ctJogo;
 
-                    try {
-                        Double precoJogo = Double.parseDouble(sc.nextLine());
-                    } catch (Exception e) {
-                        System.out.println("Valor Incorreto, tente novamente");
-                        break;
-                    }
+                    
+                    do{
+                        limpaConsole();
+                        System.out.println("Informe o nome do Jogo: ");
+                        String nome = sc.nextLine().toLowerCase();
+                        Long sizeSearch = jogos.stream().filter(j -> j.getNome().equals(nome.toLowerCase())).count();
 
-                    System.out.println("Informe a Categoria: ");
+                        if(sizeSearch == 0){
+                            continuaNome = false;
+                            nomeJogo = nome;
+                        }else {
+                            System.out.println("--- Jogo repetido ---");
+                            pause(sc);
+                        }
 
+                    }while(continuaNome);
+
+                    
+                    
+                    do{
+                        limpaConsole();
+                        System.out.println("+----------------+");
+                        System.out.println("| 1 LANÇAMENTO   |");
+                        System.out.println("| 2 PREMIUM      |");
+                        System.out.println("| 3 REGULAR      |");
+                        System.out.println("| 4 PROMOÇÃO     |");
+                        System.out.println("+----------------+");
+                        System.out.print("Informe a Categoria: ");
+                    
+                        try{
+                            String numCategoria = sc.nextLine();
+                            ctJogo = CategoriaJogo.values()[Integer.parseInt(numCategoria) - 1];
+                            continueJogo = false;
+                        }catch(Exception e){
+                            System.out.println("--- Categoria inválida ---");
+                            pause(sc);
+
+                            ctJogo = null;
+                            continueJogo = true;
+                        }
+                        
+                    }while(continueJogo);
+
+
+                    do{
+                        limpaConsole();
+                        System.out.println("Informe o preço: ");
+                        valorJogo = sc.nextLine();
+                        System.out.println("inform o preço de venda: ");
+                        valorJogoVenda = sc.nextLine();
+                        
+                        try {
+                            Jogo jogo = new Jogo(Double.parseDouble(valorJogo), Double.parseDouble(valorJogoVenda), nomeJogo, ctJogo);
+                            jogos.add(jogo);
+                        } catch (Exception e) {
+                            System.out.println("--- Valor incompátivel com a categoria ---");
+                            pause(sc);
+
+
+                            continuaPreco = true;
+                        }
+                        
+                        
+                    }while(continuaPreco);
+                    
+                    limpaConsole();
+                    System.out.println("--- jogo cadastrado ---");
+                    pause(sc);
+
+
+                    break;
                 case "6":
                     limpaConsole();
                     System.out.println("informe o nome do Cliente: ");
@@ -95,19 +167,19 @@ public class App {
                     System.out.println("Informe o usuário: ");
                     String usuarioCliente = sc.nextLine();
                     System.out.println("Informe a senha do usuário: ");
-                    String senhaCliente = sc.next();
+                    String senhaCliente = sc.nextLine();
                     System.out.println("Informe a senha novamente: ");
-                    String senhaNovamenteCliente = sc.next();
+                    String senhaNovamenteCliente = sc.nextLine();
 
                     int quantErros = 0;
-                    while (senhaCliente != senhaNovamenteCliente) {
+                    while (!senhaCliente.equals(senhaNovamenteCliente)) {
                         quantErros++;
                         limpaConsole();
                         System.out.println("Senhas diferentes, por gentileza preencher novamente");
                         System.out.println("Informe a senha do usuário: ");
-                        senhaCliente = sc.next();
+                        senhaCliente = sc.nextLine();
                         System.out.println("Informe a senha novamente: ");
-                        senhaNovamenteCliente = sc.next();
+                        senhaNovamenteCliente = sc.nextLine();
 
                         if (quantErros > 3) {
                             System.out.println("Tente novamente");
@@ -127,6 +199,7 @@ public class App {
 
         } while (continua);
 
+
     }
 
     /**
@@ -138,6 +211,49 @@ public class App {
         System.out.flush();
     }
 
+
+    public static void pegarHistorico(Scanner sc, Set<Cliente> clientes) {
+        System.out.println("Informe o nome do Cliente: ");
+        String nome = sc.nextLine();
+        try {
+            Cliente cli = clientes.stream().filter(c -> c.getNome().equals(nome)).findAny().orElseThrow(() -> new NoSuchElementException("CLiente Não Encotrado"));
+
+            System.out.println("Informe a data do historico desejado: ");
+
+            Date desejado = null;
+            Boolean error;
+
+            do {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    String dataDesejada = sc.nextLine();
+                    desejado = dateFormat.parse(dataDesejada);
+                    error = false;
+                } catch (ParseException e) {
+                    System.err.println("Por favor digite a data no formato dd/MM/yyyy");
+                    System.err.println("Data Invalida, tente novamente!");
+                    error = true;
+                }
+            } while (error == true);
+
+            System.out.println(cli.historicoDeCompras(desejado));
+
+            System.out.println("Aperte qualquer tecla para limpar o terminal");
+            pause(sc);
+            limpaConsole();
+
+        } catch (NoSuchElementException error) {
+
+            System.err.println("Cliente não Encontrado, Deseja tentar Novamente? (S - para sim)");
+            String again = sc.nextLine();
+
+            if(again.equalsIgnoreCase("S")) {
+                pegarHistorico(sc, clientes);
+            }
+
+        }
+    }
+  
     /**
      * Método responsável por pausar o scanner (entrada do usuário), fazendo com que
      * seja necessário apertar enter para prosseguir.
@@ -196,7 +312,7 @@ public class App {
      *
      * @return Jogo com menor número de vendas, null caso não encontre
      */
-    public static Jogo jogoMenosVendido(Set<Jogo> jogos) {
+    public Jogo jogoMenosVendido(Set<Jogo> jogos) {
         return jogos.stream().min((jogo, t1) -> jogo.getNumeroVendas() < t1.getNumeroVendas() ? 1 : 0)
                 .orElse(null);
     }
@@ -294,5 +410,4 @@ public class App {
             return false;
         }
     }
-
 }
