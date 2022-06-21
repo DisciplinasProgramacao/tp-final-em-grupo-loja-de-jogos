@@ -1,11 +1,16 @@
-import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Scanner;
-import com.sun.source.tree.Tree;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
 
-import java.util.*;
+import java.util.Scanner;
+import java.util.Set;
+
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -15,6 +20,7 @@ public class App {
         Scanner sc = new Scanner(System.in);
 
         do {
+            limpaConsole();
             String opcao = "";
             System.out.println("+-----------------------------------+");
             System.out.println("| 1 Comprar                         |");
@@ -26,6 +32,7 @@ public class App {
             System.out.println("| 7 Salvar Dados                    |");
             System.out.println("+-----------------------------------+");
 
+            System.out.print("Informe a opção desejada: ");
             opcao = sc.nextLine();
 
             switch (opcao) {
@@ -35,25 +42,123 @@ public class App {
                     pegarHistorico(sc, clientes);
                     break;
                 case "3":
+                    limpaConsole();
+                    System.out.println("Informe o usuario: ");
+                    String nomeUsuario = sc.nextLine();
+                    Cliente procura = clientes.stream()
+                            .filter(x -> x.getUsuario()
+                                    .equals(nomeUsuario))
+                            .findAny()
+                            .orElse(null);
+                    limpaConsole();
+                    if (procura == null) {
+                        System.out.println("Usuário não encontrado");
+                        pause(sc);
+                        break;
+                    }
+                    System.out.println("Informe a data do pedido: ");
+                    String dataPedidoString = sc.nextLine();
+                    limpaConsole();
+                    try {
+                        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                        Date dataPedido = formato.parse(dataPedidoString);
+                        procura.getPedidos().stream()
+                                .filter(pedido -> formato.format(pedido.getData()).equals(formato.format(dataPedido)))
+                                .forEach(pedido -> System.out.println(pedido.toString()));
+                        pause(sc);
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Data incorreta, tente novamente");
+                        break;
+                    } catch (NullPointerException e) {
+                        System.out.println("Data incorreta, tente novamente");
+                        break;
+                    }
 
                 case "4":
 
                 case "5":
                     limpaConsole();
+                    Boolean continueJogo;
+                    Boolean continuaPreco = false;
+                    Boolean continuaNome = true;
 
-                    System.out.println("Informe o nome do Jogo: ");
-                    String nomeJogo = sc.nextLine();
-                    System.out.println("Informe o preço: ");
+                    String valorJogo;
+                    String valorJogoVenda;
+                    String nomeJogo = "";
+                    CategoriaJogo ctJogo;
 
-                    try {
-                        Double precoJogo = Double.parseDouble(sc.nextLine());
-                    } catch (Exception e) {
-                        System.out.println("Valor Incorreto, tente novamente");
-                        break;
-                    }
+                    
+                    do{
+                        limpaConsole();
+                        System.out.println("Informe o nome do Jogo: ");
+                        String nome = sc.nextLine().toLowerCase();
+                        Long sizeSearch = jogos.stream().filter(j -> j.getNome().equals(nome.toLowerCase())).count();
 
-                    System.out.println("Informe a Categoria: ");
+                        if(sizeSearch == 0){
+                            continuaNome = false;
+                            nomeJogo = nome;
+                        }else {
+                            System.out.println("--- Jogo repetido ---");
+                            pause(sc);
+                        }
 
+                    }while(continuaNome);
+
+                    
+                    
+                    do{
+                        limpaConsole();
+                        System.out.println("+----------------+");
+                        System.out.println("| 1 LANÇAMENTO   |");
+                        System.out.println("| 2 PREMIUM      |");
+                        System.out.println("| 3 REGULAR      |");
+                        System.out.println("| 4 PROMOÇÃO     |");
+                        System.out.println("+----------------+");
+                        System.out.print("Informe a Categoria: ");
+                    
+                        try{
+                            String numCategoria = sc.nextLine();
+                            ctJogo = CategoriaJogo.values()[Integer.parseInt(numCategoria) - 1];
+                            continueJogo = false;
+                        }catch(Exception e){
+                            System.out.println("--- Categoria inválida ---");
+                            pause(sc);
+
+                            ctJogo = null;
+                            continueJogo = true;
+                        }
+                        
+                    }while(continueJogo);
+
+
+                    do{
+                        limpaConsole();
+                        System.out.println("Informe o preço: ");
+                        valorJogo = sc.nextLine();
+                        System.out.println("inform o preço de venda: ");
+                        valorJogoVenda = sc.nextLine();
+                        
+                        try {
+                            Jogo jogo = new Jogo(Double.parseDouble(valorJogo), Double.parseDouble(valorJogoVenda), nomeJogo, ctJogo);
+                            jogos.add(jogo);
+                        } catch (Exception e) {
+                            System.out.println("--- Valor incompátivel com a categoria ---");
+                            pause(sc);
+
+
+                            continuaPreco = true;
+                        }
+                        
+                        
+                    }while(continuaPreco);
+                    
+                    limpaConsole();
+                    System.out.println("--- jogo cadastrado ---");
+                    pause(sc);
+
+
+                    break;
                 case "6":
                     limpaConsole();
                     System.out.println("informe o nome do Cliente: ");
@@ -96,10 +201,15 @@ public class App {
 
     }
 
+    /**
+     * Método responsável por limpar as mensagens anteriores do
+     * console (terminal).
+     */
     private static void limpaConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
 
     public static void pegarHistorico(Scanner sc, Set<Cliente> clientes) {
         System.out.println("Informe o nome do Cliente: ");
@@ -142,75 +252,77 @@ public class App {
 
         }
     }
-
+  
+    /**
+     * Método responsável por pausar o scanner (entrada do usuário), fazendo com que
+     * seja necessário apertar enter para prosseguir.
+     * 
+     * @param sc Scanner que será "pausado"
+     */
     private static void pause(Scanner sc) {
         sc.nextLine();
-
     }
 
     /**
-     * Método que busca um jogo na lista de jogos do app.
+     * Método que busca um jogo pelo seu nome na lista de jogos passada pelo
+     * parâmetro.
      *
-     * @param nome string
-     * @return Jogo, retorna o Jogo encontrado.
-     * @throws NoSuchElementException caso não encontrar o jogo na lista de jogos
+     * @param nome  string nome do jogo
+     * @param jogos Set de Jogo em que será pesquisado
+     * @return Jogo caso seja encontrado, null se não
+     * @throws NoSuchElementException caso não encontre o jogo na lista de jogos
      */
     public Jogo encontrarJogo(String nome, Set<Jogo> jogos) {
-        Jogo achado = null;
+        Jogo achado = jogos.stream().filter(jogo -> jogo.getNome().equals(nome)).findAny().orElse(null);
 
-        for (Jogo j : jogos) {
-            if (j.getNome().equals(nome)) {
-                achado = j;
-            }
-        }
-
-        if (achado == null) {
+        if (achado == null)
             throw new NoSuchElementException("Jogo não encontrado");
-        } else {
-            return achado;
-        }
+        return achado;
     };
 
     /**
-     * metódo que cadastra um jogo na arvore de jogos da loja.
+     * Metódo que cadastra um jogo no Set de jogos passado pelo parâmetro.
      *
-     * @param j Jogo à ser adicionado na arvore de jogos
+     * @param jogo  Jogo à ser adicionado no Set de jogos
+     * @param jogos Set de Jogo que terá o jogo adicionado
      * @return boolean, true caso consiga adicionar, false caso não seja possivel
      *         adicionar.
      *
      */
-
-    public boolean cadastrarJogo(Jogo j, Set<Jogo> jogos) {
-        boolean result = jogos.add(j);
-        return result;
+    public boolean cadastrarJogo(Jogo jogo, Set<Jogo> jogos) {
+        return jogos.add(jogo);
     }
 
     /**
-     * metodo que busca o jogo mais vendido na arvore de jogos
+     * Método que retorna o jogo mais vendido no Set de jogos passado pelo
+     * parâmetro. Retorna null caso não encontre.
      *
-     * @return jogo com mais vendas
+     * @return Jogo com maior número vendas, null caso não encontre
      *
      */
-
     public Jogo jogoMaisVendido(Set<Jogo> jogos) {
-        Jogo maisVendido = jogos.stream().max((jogo, t1) -> jogo.getNumeroVendas() > t1.getNumeroVendas() ? 1 : 0)
+        return jogos.stream().max((jogo, t1) -> jogo.getNumeroVendas() > t1.getNumeroVendas() ? 1 : 0)
                 .orElse(null);
-        return maisVendido;
     }
 
     /**
-     * Metodo que retorna o jogo menos vendido na arvore de jogos,
+     * Método que retorna o jogo menos vendido no Set de jogos passado pelo
+     * parâmetro. Retorna null caso não encontre.
      *
-     * @return jogo com menos numero de vendas
+     * @return Jogo com menor número de vendas, null caso não encontre
      */
-
-    public static Jogo jogoMenosVendido(Set<Jogo> jogos) {
-        Jogo menosVendido = jogos.stream().min((jogo, t1) -> jogo.getNumeroVendas() < t1.getNumeroVendas() ? 1 : 0)
+    public Jogo jogoMenosVendido(Set<Jogo> jogos) {
+        return jogos.stream().min((jogo, t1) -> jogo.getNumeroVendas() < t1.getNumeroVendas() ? 1 : 0)
                 .orElse(null);
-
-        return menosVendido;
     }
 
+    /**
+     * 
+     * @param fileName String nome do arquivo que será carregado pelo método
+     * @param clientes Set de Cliente que terá os clientes carregados do arquivo
+     *                 adicionados
+     * @return boolean true caso dê tudo certo, false se dê algo errado
+     */
     public static boolean carregarClientesDeArquivo(String fileName, Set<Cliente> clientes) {
         try {
             FileInputStream file = new FileInputStream(fileName);
@@ -228,6 +340,13 @@ public class App {
         }
     }
 
+    /**
+     * 
+     * @param fileName String nome do arquivo que será carregado pelo método
+     * @param jogos    Set de Jogo que terá os jogos carregados do arquivo
+     *                 adicionados
+     * @return boolean true caso dê tudo certo, false se dê algo errado
+     */
     public static boolean carregarJogosDeArquivo(String fileName, Set<Jogo> jogos) {
         try {
             FileInputStream file = new FileInputStream(fileName);
@@ -247,6 +366,12 @@ public class App {
 
     }
 
+    /**
+     * 
+     * @param fileName String nome do arquivo que guardará os clientes
+     * @param clientes Set de Cliente que será guardado no arquivo
+     * @return boolean true caso tudo der certo, false se não
+     */
     public static boolean salvarClientesBin(String fileName, Set<Cliente> clientes) {
         try {
             FileOutputStream file = new FileOutputStream(fileName);
@@ -263,6 +388,12 @@ public class App {
         }
     }
 
+    /**
+     * 
+     * @param fileName String nome do arquivo que guardará os jogos
+     * @param jogos    Set de Jogo que será guardado no arquivo
+     * @return boolean true caso tudo der certo, false se não
+     */
     public static boolean salvarJogosBin(String fileName, Set<Jogo> jogos) {
         try {
             FileOutputStream file = new FileOutputStream(fileName);
@@ -278,5 +409,4 @@ public class App {
             return false;
         }
     }
-
 }
