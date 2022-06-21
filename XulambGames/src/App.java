@@ -2,6 +2,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.util.Scanner;
 import com.sun.source.tree.Tree;
+import java.text.SimpleDateFormat;
 
 import java.util.*;
 
@@ -31,6 +32,36 @@ public class App {
                 case "2":
 
                 case "3":
+                    limpaConsole();
+                    System.out.println("Informe o usuario: ");
+                    String nomeUsuario = sc.nextLine();
+                    Cliente procura = clientes.stream()
+                                              .filter(x -> x.getUsuario()
+                                              .equals(nomeUsuario))
+                                              .findAny()
+                                              .orElse(null);
+                    limpaConsole();
+                    if(procura == null){
+                        System.out.println("Usuário não encontrado");
+                        pause(sc);
+                        break;
+                    }
+                    System.out.println("Informe a data do pedido: ");
+                    String dataPedidoString = sc.nextLine();
+                    limpaConsole();
+                    try{
+                        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                        Date dataPedido = formato.parse(dataPedidoString);
+                        procura.getPedidos().stream()
+                                            .filter(x -> x.getData().equals(dataPedido))
+                                            .forEach(pedido -> System.out.println(pedido.toString()));
+                    pause(sc);
+                    break;
+                    }
+                    catch(IllegalArgumentException e){
+                        System.out.println("Data incorreta, tente novamente");
+                        break;
+                    }
 
                 case "4":
 
