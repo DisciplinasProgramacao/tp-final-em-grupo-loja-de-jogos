@@ -3,14 +3,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.DirectoryStream.Filter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collector;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -23,6 +29,7 @@ public class App {
         String arquivoJogos = "jogos.bin";
         carregarClientesDeArquivo(arquivoClientes, clientes);
         carregarJogosDeArquivo(arquivoJogos, jogos);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         do {
             limpaConsole();
             String opcao = "";
@@ -39,7 +46,7 @@ public class App {
             opcao = sc.nextLine();
             switch (opcao) {
                 case "1":
-                    comprarJogo(sc, clientes, jogos);
+                    comprarJogo(sc, clientes, jogos, format);
                     break;
                 case "2":
                     pegarHistorico(sc, clientes);
@@ -80,8 +87,25 @@ public class App {
 
                 case "4":
                     limpaConsole();
-                    Double valorMensal = pedidos.stream().mapToDouble(Pedido::getValPago).sum();
-                    Double valorMedio = valorMensal / pedidos.size();
+                    Double valorMensal = 0d;
+                    final Date dataHoje = new Date();
+
+                    //clientes.stream().forEach(cls -> {
+                    //   return cls.getPedidos().stream().filter(p -> p.getData().getMonth() == dataHoje.getMonth()).mapToDouble(Pedido::getValPago).sum();
+                    //});
+
+                    ArrayList<Pedido> listPedidos = new ArrayList<>();
+                    
+                    clientes.stream().forEach(cls -> {
+                        listPedidos.addAll(cls.getPedidos());
+                    });
+                    
+                    valorMensal =  listPedidos.stream().filter(p -> p.getData().getMonth() == dataHoje.getMonth()).mapToDouble(Pedido::getValPago).sum();
+
+
+                    //valorMensal = clientes.stream().map(cli -> cli.getPedidos().stream().filter(pedido -> new Date().getMonth() == pedido.getData().getMonth())).;
+
+                    Double valorMedio = valorMensal / listPedidos.size();
                     String formatTextMais;
                     String formatTextMenos;
 
@@ -241,7 +265,7 @@ public class App {
         System.out.flush();
     }
 
-    public static void comprarJogo(Scanner sc, Set<Cliente> clientes, Set<Jogo> jogos) {
+    public static void comprarJogo(Scanner sc, Set<Cliente> clientes, Set<Jogo> jogos, SimpleDateFormat format) {
         System.out.println("Informe o usuário do Cliente: ");
         String usuario =  sc.nextLine();
         List<Jogo> carrinhoDeCompra = new ArrayList<Jogo>();
@@ -294,7 +318,7 @@ public class App {
             String again = sc.nextLine();
 
             if(again.equalsIgnoreCase("S")) {
-                pegarHistorico(sc, clientes);
+                comprarJogo(sc, clientes, jogos,format);
             }
         }
 
@@ -306,7 +330,7 @@ public class App {
         String nomeDoJogo = sc.nextLine();
 
         try {
-            Jogo jogo = jogos.stream().filter(j -> j.getNome().equals(nomeDoJogo)).findAny().orElseThrow(() -> new NoSuchElementException("Jogo Não encontrado"));
+            Jogo jogo = jogos.stream().filter(j -> j.getNome().equals(nomeDoJogo)).findFirst().get();
 
             carrinho.add(jogo);
         } catch (NoSuchElementException e) {
@@ -327,7 +351,7 @@ public class App {
 
         try {
             Jogo jogo = jogos.stream().filter(j -> j.getNome().equals(nomeDoJogo)).findAny().orElseThrow(() -> new NoSuchElementException("Jogo Não encontrado"));
-
+            jogo.setNumeroVendas(jogo.getNumeroVendas()-1);
             carrinho.remove(jogo);
         } catch (NoSuchElementException e) {
             System.err.println("Jogo não encontrado, deseja tentar novamente? (S - para sim)");
@@ -350,7 +374,7 @@ public class App {
         String usuario = sc.nextLine();
         try {
 
-            Cliente cli = clientes.stream().filter(c -> c.getNome().equals(nome)).findAny()
+            Cliente cli = clientes.stream().filter(c -> c.getNome().equals(usuario)).findAny()
                     .orElseThrow(() -> new NoSuchElementException("CLiente Não Encotrado"));
 
             System.out.println("Informe a data do historico desejado: ");
@@ -378,7 +402,6 @@ public class App {
             limpaConsole();
 
         } catch (NoSuchElementException error) {
-
             System.err.println("Cliente não Encontrado, Deseja tentar Novamente? (S - para sim)");
             String again = sc.nextLine();
 

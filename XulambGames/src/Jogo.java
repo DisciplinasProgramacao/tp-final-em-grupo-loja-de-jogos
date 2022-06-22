@@ -28,12 +28,11 @@ public class Jogo implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s - %s - %.2fR$ - %s", this.nome, this.categoria, this.precoOriginal,
-                this.numeroDeVendas);
+        return String.format("%s - %s - %.2fR$", this.nome, this.categoria, this.precoOriginal);
     }
 
     /**
-     * Muda a categoria do jogo e retorna verdadeiro
+     * Muda a categoria do jogo e  retorna verdadeiro
      * 
      * @param categoria ICategoriaJogo categoria que substituirá a anterior
      * @return boolean true sempré retornará verdadeiro

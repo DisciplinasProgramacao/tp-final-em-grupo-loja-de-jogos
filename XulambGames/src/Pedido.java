@@ -66,6 +66,7 @@ public class Pedido implements Serializable {
         if (result) {
             for (Jogo j : jogos) {
                 valOriginal += j.precoVenda();
+                j.setNumeroVendas(j.getNumeroVendas()+1);
             }
 
             valPago = valorFinal();
@@ -91,6 +92,10 @@ public class Pedido implements Serializable {
         valorFinal -= valorFinal * descontoPorCategoria();
         if (cliente.getCategoria() != null) {
             valorFinal -= valorFinal * this.cliente.getCategoria().getDesconto();
+        }
+        this.valPago = valorFinal;
+        for(Jogo jogo : jogos) {
+            jogo.setNumeroVendas(jogo.getNumeroVendas() + 1);
         }
         return valorFinal;
 
